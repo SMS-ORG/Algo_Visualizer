@@ -5,30 +5,31 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Algo Visualizer</title>
+    <script src="./js/algorithm.js" type="text/js"></script>
     <link rel="stylesheet" href="./css/index.css">
 </head>
 
 <body>
     <nav class="header_data"> 
         <ul>
-            <li><a href="#">Bubble Sort</a></li>
-            <li><a href="#">Quick Sort</a></li>
-            <li><a href="#">Heap Sort</a></li>
-            <li><a href="#">Merge Sort</a></li>
-            <li><a href="#">BST</a></li>
-            <li><a href="#">Linked List</a></li>
-            <li><a href="#">A Star Path Finding Algorithm</a></li>
+            <li id="bubblesort"><a href="#">Bubble Sort</a></li>
+            <li id="quicksort"><a href="#">Quick Sort</a></li>
+            <li id="heapsort"><a href="#">Heap Sort</a></li>
+            <li id="mergesort"><a href="#">Merge Sort</a></li>
+            <li id="bst"><a href="#">BST</a></li>
+            <li id="linkedlist"><a href="#">Linked List</a></li>
+            <li id="pathfind"><a href="#">A Star Path Finding Algorithm</a></li>
         </ul>
     </nav>
 
     <div id="radio_container">
-        <input type="radio" name="Insert" value="1">
+        <input type="radio" id="insertStart" name="Insert" value="1">
         <label for="Insert">SetStart</label>
-        <input type="radio" name="Insert" value="2">
+        <input type="radio" id="insertEnd" name="Insert" value="2">
         <label for="InsertEnd">SetEnd</label>
-        <input type="radio" name="Insert" value="3">
+        <input type="radio" id="deleteNode" name="Insert" value="3">
         <label for="Insert">Remove</label>
-        <input type="radio" name="Insert" value="4" checked>
+        <input type="radio" id="insert" name="Insert" value="4" checked>
         <label for="Insert">Insert</label>
     </div>
     <div class="slidecontainer">
