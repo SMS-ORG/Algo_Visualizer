@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Algo Visualizer</title>
-    <script src="./js/algorithm.js" type="text/js"></script>
+    <script src="./js/algorithm.js" type="module"></script>
     <link rel="stylesheet" href="./css/index.css">
 </head>
 
@@ -37,6 +37,8 @@
     </div>
     <!-- our webgl drawing container -->
     <section class="canvas_container">
+        <canvas id="CANVAS" width="800" height="500"></canvas>
+        <canvas id="canvas" width="800" height="500"></canvas>
     </section>
     <button type="submit" id="clickable" value="Sort">Sort</button>
 </body>

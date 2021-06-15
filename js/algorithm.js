@@ -1,3 +1,4 @@
+import {Utils, main, sort} from "./canvas.js";
 var toggler = "";
 
 //Add active class to Selected links
@@ -64,6 +65,22 @@ const Bst = ()=>{
     ChangeActive("bst");                    //function for Bst
 }
 
+function Sortingmethod() {
+    if (toggler) {
+        if (toggler === "pathfind" || toggler === "bst" || toggler === "linkedlist") {
+            sort(toggler);
+            return;
+        }
+    
+        if (Utils.Sorting.arr.length == 0) {
+            alert("Slide on the slider");
+        } else {
+            sort(toggler, Utils.Sorting.arr);
+        }
+    } else {
+        alert("Select A Method First");
+    }
+}
 
 (function (window, document, undefined) {
 
@@ -98,7 +115,8 @@ const Bst = ()=>{
         let slider = document.getElementById("myRange");
 
         slider.oninput = function () {
-            //do something
+            Utils.Sorting.newarray(slider.value);
+            main(Utils.Sorting.arr);
         }
     }
 

@@ -84,3 +84,20 @@ a{
     width: 50%;
     justify-content: space-between;
   }
+
+/* canvas */
+.canvas_container{
+    position: relative;
+    display: block; 
+    width: 800px;
+    height: 500px;
+}
+canvas{
+  transform: translate(40%, 0%);
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+#canvas{
+  z-index: 1;
+}
