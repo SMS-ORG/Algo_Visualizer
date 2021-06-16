@@ -1,3 +1,6 @@
+import { bubblesort, quicksort, heapsort, mergesort} from './sortingalgorithms.js';
+
+
 class Webgraphics {
     //requires id of canvas and webgl type
     constructor(CANVAS_ID, WEBGL_V, valx = 0, valy = 0) {
@@ -67,6 +70,7 @@ const RecShaders = {
         '}'
     ].join('\n')
 }
+
 
 function compileShaders(gl, type, source) {
     let shader = gl.createShader(type);
@@ -194,6 +198,7 @@ function Randomvalue(max, min) {
 }
 
 
+
 const Utils = {
     Webglv : new Webgraphics("#CANVAS", "webgl"),
     ctx : new Ctx("#canvas"),
@@ -235,6 +240,9 @@ function getStartingpointofrectdraw(length) {
 }
 
 function main(arr_y) {
+    Utils.ctx.clear();
+    Utils.Webglv.clear();
+
     const{width, space} = Utils.Sorting;
     let i = getStartingpointofrectdraw(arr_y.length);
     let bars = new Rectangle(Utils.Webglv);
@@ -247,7 +255,91 @@ function main(arr_y) {
     });
 }
 
+function drawSortedElements(arr_y, queue) {
+    const frame_rate = Utils.frameRate;
+    const{width, space} = Utils.Sorting;
+
+    let previous_time = Date.now();
+    let bars = new Rectangle(Utils.Webglv);
+
+    let j = 0, counter = 0;
+    let animationOne, queue_element;
+
+    let drawsortedArr = function () {
+        j = getStartingpointofrectdraw(arr_y.length);
+        var now, elapsed_time;
+        now = Date.now();
+        elapsed_time = now - previous_time;
+        if (elapsed_time >= frame_rate) {
+            counter++;
+            Utils.Webglv.clear();
+            for (let i = 0; i < Utils.Sorting.arr.length; i++) {
+                bars.setColor("green");
+                bars.setGeometry(j, 0, width, arr_y[i]);
+                // Render the scene.
+                bars.draw();
+
+                j = j + width + space;
+
+                // Remember when this scene was rendered.
+                previous_time = now;
+            }
+        }
+        if (counter != 20) {
+            animationOne = window.requestAnimationFrame(drawsortedArr);
+        } else {
+            window.cancelAnimationFrame(animationOne);
+        }
+    }
+
+    let animate = function () {
+        j = getStartingpointofrectdraw(arr_y.length);
+        var now, elapsed_time;
+        now = Date.now();
+        elapsed_time = now - previous_time;
+        if (elapsed_time >= frame_rate) {
+            queue_element = queue.shift();
+            Utils.Webglv.clear();
+            for (let i = 0; i < Utils.Sorting.arr.length; i++) {
+                if (queue_element[2] && queue_element[0] == i) {
+                    [arr_y[i], arr_y[queue_element[1]]] = [arr_y[queue_element[1]], arr_y[i]];
+                    bars.setColor("green");
+                }
+                else if (queue_element[2] && queue_element[1] == i) {
+                    bars.setColor("green");
+                }
+                else if (queue_element[0] == i || queue_element[1] == i) {
+                    bars.setColor("blue");
+                } else {
+                    bars.setColor("red");
+                }
+
+                bars.setGeometry(j, 0, width, arr_y[i]);
+                // Render the scene.
+                bars.draw();
+
+                j = j + width + space;
+
+                // Remember when this scene was rendered.
+                previous_time = now;
+            };
+        }
+        if (queue.length != 0) {
+            animationOne = window.requestAnimationFrame(animate);
+        } else {
+            // window.cancelAnimationFrame(animationOne);
+            animationOne = window.requestAnimationFrame(drawsortedArr);
+        }
+    };
+    animationOne = window.requestAnimationFrame(animate);
+}
+
+
+
+
+
 function sort(sorttype, arr = null) {
+    let queue = [];
     let callSortfunc = false;
     let copy_of_array = [];
 
@@ -256,21 +348,20 @@ function sort(sorttype, arr = null) {
     }
 
     if (sorttype == "bubblesort") {
+        queue = bubblesort(arr);
         callSortfunc = true;
-        //call bubblesort
     } 
     else if (sorttype === "quicksort") {
         callSortfunc = true;
-        //call quicksort
+        queue = quicksort(arr, 0, arr.length - 1);
     } 
     else if (sorttype === "heapsort") {
+        queue = heapsort(arr, arr.length);
         callSortfunc = true;
-        //call heapsort
-
     }
     else if (sorttype === "mergesort"){
         callSortfunc = true;
-        // call mergesort
+        queue = mergesort(arr, 0, arr.length - 1);
     }
     else if (sorttype === "pathfind"){ 
         //call path find
@@ -284,7 +375,7 @@ function sort(sorttype, arr = null) {
     }
 
     if( callSortfunc ){
-        //draw function
+        drawSortedElements(copy_of_array, queue);
     }
 }
 
