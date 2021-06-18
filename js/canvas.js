@@ -175,6 +175,208 @@ class Rectangle {
     }
 }
 
+class Line {
+    static Vshader = null;
+    static Fshader = null;
+    static program = null;
+    constructor(parent) {
+        this.parent = parent;
+        this.position = [];
+        this.color = [];
+
+        //GLSL code required for drawing Shaders
+        if (!LineShaders.compiled) {
+            Line.Vshader = compileShaders(this.parent.gl, this.parent.gl.VERTEX_SHADER, LineShaders.Vshadersource);
+            Line.Fshader = compileShaders(this.parent.gl, this.parent.gl.FRAGMENT_SHADER, LineShaders.Fshadersource);
+            LineShaders.compiled = true;
+        }
+        if (Line.program == null) {
+            Line.program = this.parent.createProgramandattachShaders(Line.Vshader, Line.Fshader);
+            this.parent.gl.useProgram(Line.program);
+            this.parent.createAndBindBuffer();
+            //set u_resolution attribute
+            let PositionUresolution = this.parent.gl.getUniformLocation(Line.program, "u_resolution");
+            let res = [this.parent.canvas.clientWidth, this.parent.canvas.clientHeight];
+            this.parent.gl.uniform2f(PositionUresolution, res[0], res[1]);
+        }
+    }
+
+
+    setParent(parent) {
+        this.parent = parent;
+    }
+
+    setGeometry(x, y, distance, angle) {
+        var x1 = x;
+        var x2 = Math.floor(Math.cos(angle * Math.PI / 180)) * distance + x;
+        var y1 = y;
+        var y2 = Math.floor(Math.sin(angle * Math.PI / 180)) * distance + y;
+        this.position = [
+            x1, y1,
+            x2, y2,
+        ];
+    }
+
+    setGeometryp(x , y, x1, y1){
+        this.position = [
+            x, y,
+            x1, y1
+        ]
+    }
+
+    //Color_name = red,green,blue,yellow,purple,black
+    setColor(color_name) {
+        if (color_name == "red") {
+            this.color = [180 / 255, 0, 0];
+        }
+        else if (color_name == "green") {
+            this.color = [0, 100 / 255, 0];
+        }
+        else if (color_name == "blue") {
+            this.color = [0, 0, 1.0];
+        }
+        else if (color_name == "yellow") {
+            this.color = [1.0, 1.0, 0];
+        }
+        else if (color_name == "purple") {
+            this.color = [102 / 255, 0, 102 / 255];
+        }
+        else {
+            this.color = [0, 0, 0];
+        }
+    }
+
+
+    draw(drawing = true) {
+        if (drawing) {
+            if (!this.parent.program) {
+                this.parent.createProgramandattachShaders(Line.Vshader, Line.Fshader);
+            };
+            this.parent.gl.useProgram(Line.program);
+            this.parent.gl.bufferData(this.parent.gl.ARRAY_BUFFER, new Float32Array(this.position), this.parent.gl.STATIC_DRAW);
+            let positionAttribLocation = this.parent.gl.getAttribLocation(Line.program, "vertPosition");
+            let colorUniformLocation = this.parent.gl.getUniformLocation(Line.program, "fragColor");
+            this.parent.gl.uniform3f(colorUniformLocation, this.color[0], this.color[1], this.color[2]);
+
+            this.parent.gl.vertexAttribPointer(
+                positionAttribLocation,
+                2,
+                this.parent.gl.FLOAT,
+                this.parent.gl.FALSE,
+                2 * Float32Array.BYTES_PER_ELEMENT,
+                0);
+            this.parent.gl.enableVertexAttribArray(positionAttribLocation);
+            this.parent.gl.drawArrays(this.parent.gl.LINES, 0, 2);
+        }
+    }
+}
+
+//Circ Shaders Class
+const CircShaders = {
+    compiled : false,
+}
+
+//class for drawing circles
+class Circle{
+    static Vshader=null;
+    static Fshader=null;
+    static program=null;
+    constructor(parent){
+        this.parent=parent;
+        this.position=[];
+        this.color=[];
+        
+        //GLSL code required for drawing Shaders
+        if(!CircShaders.compiled){
+            Circle.Vshader=compileShaders(this.parent.gl,this.parent.gl.VERTEX_SHADER, RecShaders.Vshadersource);
+            Circle.Fshader=compileShaders(this.parent.gl,this.parent.gl.FRAGMENT_SHADER, RecShaders.Fshadersource);
+            CircShaders.compiled=true;
+            if(!Circle.program){
+                Circle.program=this.parent.createProgramandattachShaders(Circle.Vshader, Circle.Fshader);
+            }
+            if(!this.parent.buff){
+                this.parent.createAndBindBuffer();
+            }
+            //set u_resolution attribute
+            this.parent.gl.useProgram(Circle.program);
+            let PositionUresolution=this.parent.gl.getUniformLocation(Circle.program,"u_resolution");
+            let res=[this.parent.canvas.clientWidth,this.parent.canvas.clientHeight];
+            this.parent.gl.uniform2f(PositionUresolution,res[0],res[1]);
+        }
+    }
+
+
+    setParent(parent){
+        this.parent=parent;
+    }
+
+    setGeometry(x,y,radius){
+        var N = 100;
+        this.position = [x, y];
+    
+        for (var i = 0; i <= N; i++) {
+            var theta = i * 2 * Math.PI / N;
+            var k = radius * Math.sin(theta) + x;//+ x;
+            var m = radius * Math.cos(theta) + y;//+ y;
+            this.position.push(k, m);
+        }
+    
+    }
+
+    //Color_name = red,green,blue,yellow,purple,black
+    setColor(color_name){
+        if(color_name=="red"){
+            this.color=[1.0,165/255,0];
+        }
+        else if(color_name=="green"){
+            this.color=[0,1.0,0];
+        }
+        else if(color_name=="blue"){
+            this.color=[0,0,1.0];
+        }
+        else if(color_name=="yellow"){
+            this.color=[1.0,1.0,0];
+        }
+        else if(color_name=="purple"){
+            this.color=[102/255,0,102/255];
+        }
+        else{
+            this.color=[0,0,0];
+        }
+    }
+
+
+    draw(drawing=true){
+        if(drawing){
+            this.parent.gl.useProgram(Circle.program);
+            this.parent.gl.bufferData(this.parent.gl.ARRAY_BUFFER,
+                new Float32Array(this.position),
+                this.parent.gl.STATIC_DRAW);
+            let positionAttribLocation=this.parent.gl.getAttribLocation(Circle.program, "vertPosition");
+            let colorUniformLocation=this.parent.gl.getUniformLocation(Circle.program, "fragColor"); 
+            this.parent.gl.uniform3f(colorUniformLocation,
+                this.color[0],
+                this.color[1], 
+                this.color[2]
+            );
+
+            this.parent.gl.vertexAttribPointer(
+                positionAttribLocation, 
+                2, 
+                this.parent.gl.FLOAT,
+                this.parent.gl.FALSE, 
+                2 * Float32Array.BYTES_PER_ELEMENT, 
+                0
+            );
+            this.parent.gl.enableVertexAttribArray(positionAttribLocation);
+            this.parent.gl.drawArrays(this.parent.gl.TRIANGLE_FAN, 
+                0, 
+                this.position.length/2
+            );
+        }
+    }
+}
+
 class Ctx{
     constructor(CANVAS_ID){
         this.canvas = document.querySelector(CANVAS_ID);
