@@ -67,15 +67,27 @@ a{
     cursor: pointer;
   }
 
-  #clickable{
-    width:60px;
-    height:30px;
-    background-color: blue;
-    font-weight: bold;
-    color:red;
-    position: absolute;
-    top : 15%;
-  }
+/* play pause button */
+#playPause{
+  border: 0;
+  background: transparent;
+  box-sizing: border-box;
+  width: 0;
+  height: 74px;
+  border-color: transparent transparent transparent #df6060;
+  transition: 100ms all ease;
+  cursor: pointer;
+  border-style: solid;
+  border-width: 37px 0 37px 60px;
+}
+#playPause.paused {
+  border-style: double;
+  border-width: 0px 0 0px 60px;
+}
+#playPause:hover {
+  border-color: transparent transparent transparent #404040;
+}
+
 
   #radio_container{
     display: flex;

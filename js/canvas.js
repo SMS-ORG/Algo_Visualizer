@@ -1,5 +1,5 @@
 import { bubblesort, quicksort, heapsort, mergesort} from './sortingalgorithms.js';
-
+import {Astar, Astarfunc, makeGrid, updateGrid} from './Astar.js';
 
 class Webgraphics {
     //requires id of canvas and webgl type
@@ -71,6 +71,33 @@ const RecShaders = {
     ].join('\n')
 }
 
+const LineShaders = {
+    compiled : false,
+    Vshadersource : [
+        'precision highp float;',
+        '',
+        'attribute vec2 vertPosition;',
+        'uniform vec2 u_resolution;',
+        '',
+        'void main()',
+        '{',
+        'vec2 zeroToOne = vertPosition / u_resolution;',
+        'vec2 zeroToTwo = zeroToOne*2.0;',
+        'vec2 Clipspace = zeroToTwo - 1.0;',
+        'gl_Position = vec4(Clipspace, 0.0, 1.0);',
+        '}'
+    ].join('\n'),
+
+    Fshadersource : [
+        'precision highp float;',
+        '',
+        'uniform vec3 fragColor;',
+        'void main()',
+        '{',
+        '  gl_FragColor = vec4(fragColor, 1.0);',
+        '}'
+    ].join('\n')
+}
 
 function compileShaders(gl, type, source) {
     let shader = gl.createShader(type);
@@ -431,6 +458,21 @@ const Utils = {
         {
             return [Utils.canvas.canv.clientWidth, Utils.canvas.canv.clientHeight, Utils.canvas.canv.getBoundingClientRect()];
         }
+    },
+
+    AnimationController : {
+        queueIndex: 0,
+        frameRate : 100,
+        recentFrameRate : 100,
+        playing : false,
+        animationNo : 0,
+        now: 0,
+        elapsed_time: 0,
+        time: Date.now(),
+        cancelAnimation : function(){
+            window.cancelAnimationFrame(Utils.AnimationController.animation);
+            document.getElementById("playPause").classList.toggle("paused");
+        },
     }
 }
 
@@ -536,8 +578,199 @@ function drawSortedElements(arr_y, queue) {
     animationOne = window.requestAnimationFrame(animate);
 }
 
+//returns index if included else -1
+function isIncludeInLibrary(arr, point) {
+    for (let k = 0; k < arr.length; k++) {
+        if (arr[k][0] === point[0] && arr[k][1] === point[1]) {
+            return k;
+        }
+    }
+    return -1;
+}
+
+function drawsmallRectangles(que = null) {
+    let queue;
+    if(que != null){
+        queue = [].concat(que);
+    }
+    drawGrid();
+    let counter = 0;
+
+    let gap = Astar.gapOfGrid;
+    let inputPositions = Astar.inputedPos;
+
+    let square = new Rectangle(Utils.Webglv);
+    function drawInputpos(){
+        for (let i = 0; i < inputPositions.length; i++) {
+            square.setGeometry(inputPositions[i][0],
+                inputPositions[i][1], 
+                gap, 
+                gap);
+
+            square.setColor("black");
+            if (i === 0) {
+                square.setColor("purple");
+            }
+            if (i === 1) {
+                square.setColor("red");
+            }
+            square.draw();
+        }   
+    }
+    if (queue != null) {
+        let previous_time = Date.now();
+        let pos;
+        let animate = function () {
+                var now, elapsed_time;
+                let queue_element;
+                now = Date.now();
+                elapsed_time = now - previous_time;
+                if (elapsed_time >= Utils.AnimationController.frameRate) {
+                        counter = counter + 3;
+                        if(counter >= queue.length){
+                            counter = queue.length-1;
+                        }
+                        drawGrid();
+                        drawInputpos();
+                        for(let i=0; i<= counter ; i++){
+                            queue_element = queue[i];
+                            if( queue_element.isBarrier() || queue_element.isEnd() || queue_element.isStart() ){
+                                continue;
+                            }
+                            pos = queue_element.gPos();
+                            square.setGeometry(pos[0], pos[1], Astar.gapOfGrid, Astar.gapOfGrid);    
+                            if( queue_element.isPath() ){
+                                square.setColor("blue");
+                            }else{
+                                square.setColor("green");
+                            }
+                            square.draw();
+                    }// Remember when this scene was rendered.
+                        previous_time = now;
+                }
+                if ( queue.length > (counter+1) ){
+                    Utils.AnimationController.animationNo = window.requestAnimationFrame(animate);
+                } else {
+                    Utils.AnimationController.cancelAnimation();
+                    Utils.AnimationController.playing = false;
+                }
+            };
+        Utils.AnimationController.animationNo = window.requestAnimationFrame(animate);
+    }else{
+        drawInputpos();
+    }
+}
+
+function drawGrid() {
+    Utils.Webglv.clear();
+    const [width, height]= Utils.canvas.getRes();
+    let gridLine = new Line(Utils.Webglv);
+
+    for (let i = 10; i < width; i = i + 20) {
+        gridLine.setGeometry(10, i, width - 20, 0);
+        gridLine.setColor("black");
+        gridLine.draw();
+    }
+
+    for (let i = 10; i < width; i = i + 20) {
+        gridLine.setGeometry(i, 10, height - 20, 90);
+        gridLine.setColor("black");
+        gridLine.draw();
+    }
+}
+
+function obtainMousePosition(event) {
+    let mode = Utils.Drawmodes;
+    let gap = Astar.gapOfGrid;
+    let [width, height, rect] = Utils.canvas.getRes();
+
+    let x = (event.clientX - rect.left) + 10;
+    let y = height - (event.clientY - rect.top) + 10;
+    x = Math.floor(x / gap) * gap - 10;
+    y = Math.floor(y / gap) * gap - 10;
+
+    if (x > (width - 20) || x < 0  || y > (height - 20) || y < 0) {
+        return;
+    }
+
+    let point = new Array(x, y);
+    let M = isIncludeInLibrary(Astar.inputedPos, point);
+    if ( M != -1) {
+        Astar.inputedPos.splice(M, 1);
+    }
+    if(mode & 0x008 || mode & 0x002 || mode & 0x001){
+        if( mode & 0x008){
+            Astar.inputedPos.push(point);
+        }else if( mode & 0x001){
+            if(Astar.inputedPos.length == 0){
+                Astar.inputedPos.push(point);
+            }else{
+                Astar.inputedPos[0] = point;
+            }
+        }else{
+            Astar.inputedPos.splice(1,0,point);
+        }
+    }
+    else {
+        M = isIncludeInLibrary(Astar.inputedPos, point);
+        if ( M != -1) {
+            Astar.inputedPos.splice(M, 1);
+        }
+    }
+    updateGrid();
+    drawsmallRectangles();
+}
 
 
+const clearResourcesSort = function(functions){
+    document.getElementById("myRange").disabled = true;
+} 
+const clearResourcesPathFind = function(functions){
+    let canv = document.getElementById("CANVAS");
+    document.querySelectorAll('input[type=radio][name="Insert"]').forEach(element => 
+        {
+            element.disabled = true;
+        }
+    );
+    canv.removeEventListener("mousedown", functions[0]);
+    canv.removeEventListener("mouseout", functions[1]);
+    canv.removeEventListener("mouseup", functions[1]);
+    Astar.grid = [];
+}
+
+function makeReady(flag, functions) {
+    if (flag === 1) {
+        // let canv = document.getElementById("CANVAS");
+        document.getElementById("myRange").disabled = false;
+        clearResourcesPathFind(functions);
+    } 
+    else if (flag === 2) {
+        Utils.ctx.clear();
+        let canv = document.getElementById("CANVAS");
+        canv.addEventListener("mousedown", functions[0]);
+        canv.addEventListener("mouseout", functions[1]);
+        canv.addEventListener("mouseup", functions[1]);
+        clearResourcesSort(functions);
+        drawGrid();
+        makeGrid();
+        document.querySelectorAll('input[type=radio][name="Insert"]').forEach(element => 
+            {
+                element.disabled = false;
+            }
+        );
+    }
+    else if (flag === 3){
+        Utils.ctx.clear();
+        Utils.Webglv.clear();
+
+        clearResourcesSort(functions);
+        clearResourcesPathFind(functions);
+    } 
+    else {
+        Utils.ctx.clear();
+        Utils.Webglv.clear();
+    }
+}
 
 
 function sort(sorttype, arr = null) {
@@ -566,7 +799,7 @@ function sort(sorttype, arr = null) {
         queue = mergesort(arr, 0, arr.length - 1);
     }
     else if (sorttype === "pathfind"){ 
-        //call path find
+        Astarfunc();
     }
     else if (sorttype === "bst"){
         //call BST
@@ -582,4 +815,4 @@ function sort(sorttype, arr = null) {
 }
 
 
-export { main, sort, Utils}
+export { main, sort, Utils, makeReady, drawsmallRectangles, obtainMousePosition}
