@@ -1,74 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
 *{
     margin:0;
     padding: 0;
     box-sizing: border-box;
     font-family: sans-serif;
-    font-size: 20px;
-}
-.header_data{
-    background-color: rgb(34, 114, 34);
-    height:50px;
-}
-.header_data>ul{
-    list-style-type: none;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
-    padding-top: 10px;;
-}
-a{
-    text-decoration: None;
-}
-.active{
-    height:30px;
-    background-color: blue;
-}
-.active a{
-    color:rgb(233, 19, 19);
-    padding: 9px 0px;
 }
 
-/*slider*/
-.slidecontainer{
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
+/* canvas settings */
+.boxy{
+  background: linear-gradient(to top right,rgba(105, 174, 206, 0.9),rgba(87, 221, 165, 0.3));
+  border: 2px solid rgb(189, 182, 182);
+  height: 600px;
 }
-.slider {
+
+.row{
+  height: 100%;
+}
+
+hr{
+  background-color: purple;
+}
+
+#canvas_container{
+  position: relative;
+  display: block; 
+  width: 800px;
+  height: 500px;
+}
+
+/* canvas */
+canvas{ 
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+
+#CANVAS{
+  z-index: 1;
+}
+
+/* settings panel */
+.tools-tab{
+  background:linear-gradient(to bottom,rgba(23, 8, 36,1),rgba(23,13,40,0.9));
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.settings_panel{
+  position: relative;
+  margin-top : 5%;
+  width: 100%;
+  height: 100%;
+  box-shadow: #06f139 2px 1px 1px 1px;
+  border-radius: 10px 20px 10px 20px;
+  background: transparent;
+}
+
+#main_panel{
+  height: 40%;
+}
+#introduction{
+  border-radius: 10px 20px 10px 20px;
+  position: absolute;
+  text-align: center;
+  overflow: scroll;
+  overflow-x: hidden;
+  opacity: 0.7;
+  background-color: rgb(153, 225, 228);
+  height: 100%;
+  width: 100%;
+  padding-right: 3px;
+  font-family: 'Playfair Display', 'serif';
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+#introduction::-webkit-scrollbar{
+  display: none;
+}
+
+
+/* sliders  */
+.sliders{
+  position: relative;
+  margin-top: 10px;
+}
+#myRange {
+    position: absolute;
     -webkit-appearance: none;
-    width: 100%;
+    width: 80%;
     height: 15px;
     border-radius: 5px;  
-    background: #d3d3d3;
+    background: #06f139;
     outline: none;
     opacity: 0.7;
     -webkit-transition: .2s;
+    margin-left: 10px;
     transition: opacity .2s;
-  }
-  
-  .slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 25px;
-    height: 25px;
-    border-radius: 50%; 
-    background: #4CAF50;
-    cursor: pointer;
-  }
-  
-  .slider::-moz-range-thumb {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    /*background: #4CAF50;*/
-    background: #0a2291;
-    cursor: pointer;
-  }
+}
+
+#frameSlider{
+  position: absolute;
+  border: 1px white;
+  border-radius: 4px;
+  width: 45px;
+  left : 87%;
+}
+
+#frameSlider, #frameSlider>option
+{
+  background-color: rgb(43, 219, 219);
+}
+
+#stop{
+  position: absolute;
+  top:67px;
+  margin-left: 58%;
+}
+
+#radio_container{
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+  flex-direction: row;
+}
 
 /* play pause button */
 #playPause{
+  position: absolute;
   border: 0;
   background: transparent;
   box-sizing: border-box;
@@ -79,6 +138,10 @@ a{
   cursor: pointer;
   border-style: solid;
   border-width: 37px 0 37px 60px;
+
+  top:27px;
+  margin-left: 40%;
+
 }
 #playPause.paused {
   border-style: double;
@@ -89,27 +152,24 @@ a{
 }
 
 
-  #radio_container{
-    display: flex;
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
-    justify-content: space-between;
-  }
+/* vertical slider */
+input[type=range][orient=vertical]
+{
+    writing-mode: bt-lr; /* IE */
+    -webkit-appearance: slider-vertical; /* WebKit */
+    width: 8px;
+    height: 100px;
+    padding: 0 5px;
+}
 
-/* canvas */
-.canvas_container{
-    position: relative;
-    display: block; 
-    width: 800px;
-    height: 500px;
+.labels_text{
+  font-size: medium;
+  color:rgb(230, 226, 34);
+  font-weight: bolder;
 }
-canvas{
-  transform: translate(40%, 0%);
-  position: absolute;
-  left: 0px;
-  top: 0px;
-}
-#canvas{
-  z-index: 1;
+
+#about{
+  text-align: center;
+  text-decoration: none;
+  color: aquamarine;
 }

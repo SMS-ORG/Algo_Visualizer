@@ -1,45 +1,79 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Algo Visualizer</title>
-    <script src="./js/algorithm.js" type="module"></script>
-    <link rel="stylesheet" href="./css/index.css">
+	<title>Algo_Visualizer</title>
+	<meta charset="utf-8"/>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" 
+	rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+
+	<link rel="stylesheet" href="./css/index.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src="./js/algorithm.js" type="module"></script>
 </head>
 
 <body>
-    <nav class="header_data"> 
-        <ul>
-            <li class="active" id="bubblesort"><a href="#">Bubble Sort</a></li>
-            <li id="quicksort"><a href="#">Quick Sort</a></li>
-            <li id="heapsort"><a href="#">Heap Sort</a></li>
-            <li id="mergesort"><a href="#">Merge Sort</a></li>
-            <li id="bst"><a href="#">BST</a></li>
-            <li id="linkedlist"><a href="#">Linked List</a></li>
-            <li id="pathfind"><a href="#">A Star Path Finding Algorithm</a></li>
-        </ul>
-    </nav>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	<div class="container-fluid">
+		<div class="navbar-header">			
+	    	<a id="about" href="#" class="navbar-brand"> Algo-Visualizer</a>
+	    </div>
 
-    <div id="radio_container">
-        <input type="radio" id="insertStart" name="Insert" value="1">
-        <label for="Insert">SetStart</label>
-        <input type="radio" id="insertEnd" name="Insert" value="2">
-        <label for="InsertEnd">SetEnd</label>
-        <input type="radio" id="deleteNode" name="Insert" value="3">
-        <label for="Insert">Remove</label>
-        <input type="radio" id="insert" name="Insert" value="4" checked>
-        <label for="Insert">Insert</label>
-    </div>
-    <div class="slidecontainer">
-        <input type="range" min="5" step="5" max="130" value="65" class="slider" id="myRange">
-    </div>
-    <!-- our webgl drawing container -->
-    <section class="canvas_container">
-        <canvas id="CANVAS" width="800" height="500"></canvas>
-        <canvas id="canvas" width="800" height="500"></canvas>
-    </section>
-    <button id="playPause"></button>
+	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	      	<ul class="nav navbar-nav">
+		        <li class="nav-item"><a id="bubblesort" class="nav-link active" href="#" >Bubblesort</a></li>
+		        <li class="nav-item"><a id="quicksort" class="nav-link" href="#">Quicksort</a></li>
+		       	<li class="nav-item"><a id="heapsort" class="nav-link" href="#">Heapsort</a></li>
+		        <li class="nav-item"><a id="mergesort" class="nav-link" href="#">Mergesort</a></li>
+		        <li class="nav-item"><a id="bst" class="nav-link" href="#">BST</a></li>
+		        <li class="nav-item"><a id="linkedlist" class="nav-link" href="#">Linked List</a></li>
+		        <li class="nav-item"><a id="pathfind" class="nav-link" href="#">A* path finding</a></li>
+	    	</ul>
+		</div> 
+	</div>
+	</nav>
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-lg-8 col-xs-8 boxy">
+				<section id="canvas_container">
+					<canvas id="canvas" width="800" height="500"></canvas>
+					<canvas id="CANVAS" width="800" height="500"></canvas>
+				</section>
+			</div>
+			<div class="col-lg-4 col-xs-8 tools-tab">
+				<div class="settings_panel" id="main_panel">
+					<div id="radio_container">
+						<input type="radio" id="insertStart" name="Insert" value="1">
+						<label class="labels_text" for="Insert">SetStart</label>
+						<input type="radio" id="insertEnd" name="Insert" value="2">
+						<label class="labels_text" for="InsertEnd">SetEnd</label>
+						<input type="radio" id="deleteNode" name="Insert" value="3">
+						<label class="labels_text" for="Insert">Remove</label>
+						<input type="radio" id="insert" name="Insert" value="4" checked>
+						<label class="labels_text" for="Insert">Insert</label>
+					</div>
+					<section class="sliders">
+						<input type="range" min="5" step="5" max="130" value="65" id="myRange">
+						<select id="frameSlider">
+							<option  value="240">0.25x</option>
+							<option  value="120">0.5x</option>
+							<option  value="60" selected>1x</option>
+							<option  value="40">1.5x</option>
+							<option  value="30">2x</option>
+						</select>
+						<button id="playPause"></button>
+					</section>
+				</div>
+				<div class="settings_panel">
+					<div id="introduction">
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
