@@ -1,2 +1,2 @@
-# Algo_Visualizer
-The aim of this project is to help visualize various algorithms. 
+1. Run shellscript on terminal ie, ./shellscript
+2. Open any browser to view.  localhost:8000

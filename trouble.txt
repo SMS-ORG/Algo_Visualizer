@@ -1,0 +1,1 @@
+Access to script in a file location was blocked due to CORS policy,defined RFC 6564 with name Origin

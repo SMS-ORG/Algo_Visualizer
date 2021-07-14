@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Algo_Visualizer</title>
+    <meta charset="utf-8" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
+      crossorigin="anonymous"
+    />
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="./css/canvas_page.css" />
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a id="about" href="./index.html" class="navbar-brand"> Algo-Visualizer</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li class="nav-item">
+              <a id="bubblesort" class="nav-link active" href="#">Bubblesort</a>
+            </li>
+            <li class="nav-item">
+              <a id="quicksort" class="nav-link" href="#">Quicksort</a>
+            </li>
+            <li class="nav-item">
+              <a id="heapsort" class="nav-link" href="#">Heapsort</a>
+            </li>
+            <li class="nav-item">
+              <a id="mergesort" class="nav-link" href="#">Mergesort</a>
+            </li>
+            <li class="nav-item">
+              <a id="bst" class="nav-link" href="#">BST</a>
+            </li>
+            <li class="nav-item">
+              <a id="linkedlist" class="nav-link" href="#">Linked List</a>
+            </li>
+            <li class="nav-item">
+              <a id="pathfind" class="nav-link" href="#">A* path finding</a>
+            </li>
+          </ul>
+        </div>
+        <span class="nav-link about-algo">About</span>
+      </div>
+    </nav>
+
+    <div class="container_fluid">
+        <div class="boxy">
+          <section id="canvas_container">
+            <canvas id="canvas" width="800px" height="500px"></canvas>
+            <canvas id="CANVAS" width="800px" height="500px"></canvas>
+          </section>
+        </div>
+        <div class="boxy tools-tab">
+          <div class="settings_panel" id="main_panel">
+              <div><button id="playPause"></button></div>
+            </div>
+            <div class="labels_container">
+              <label for="playPause">Play/Pause</label>
+            </div>
+            <ul id="radio_container">
+              <li class="radio_container__item">
+                <input type="radio" id="insertStart" name="Insert" value="1" />
+                <label class="labels_text" for="Insert">SetStart</label>
+              </li>
+              <li class="radio_container__item">
+                <input type="radio" id="insertEnd" name="Insert" value="2" />
+                <label class="labels_text" for="InsertEnd">SetEnd</label>
+              </li>
+              <li class="radio_container__item">
+                <input type="radio" id="deleteNode" name="Insert" value="3" />
+                <label class="labels_text" for="Insert">Remove</label>
+              </li>
+              <li class="radio_container__item">
+                <input
+                  type="radio"
+                  id="insert"
+                  name="Insert"
+                  value="4"
+                  checked
+                />
+                <label class="labels_text" for="Insert">Insert</label>
+              </li>
+            </ul>
+            <section class="sliders">
+              <input
+                type="range"
+                min="5"
+                step="5"
+                max="65"
+                value="30"
+                id="myRange"
+              />
+              <select id="frameSlider">
+                <option value="240">0.25x</option>
+                <option value="120">0.5x</option>
+                <option value="60" selected>1x</option>
+                <option value="40">1.5x</option>
+                <option value="30">2x</option>
+              </select>
+            </section>
+            <div class="labels_container">
+              <label for="myRange" style="margin-left:100px;margin-right: 10rem;">Form Array</label>
+              <label for="frameSlider">Frame</label>
+            </div>
+          </div>
+        </div>
+    </div>
+    <section class="about">
+      <div class="close-btn">
+        <ion-icon name="close-outline"></ion-icon>
+      </div>
+      <section id="introduction"></section>
+    </section>
+    <script src="./js/algorithm.js" type="module"></script>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
+    ></script>
+  </body>
+</html>

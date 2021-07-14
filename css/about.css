@@ -1,0 +1,115 @@
+body{
+    background-color: rgb(73, 70, 70);
+    background-image: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.85) 100%);
+  }
+  
+  
+  .nav {
+    text-align: center;
+  
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width:90%;
+    margin: 0 auto;
+    padding-top: 15px;
+  }
+  .nav .links {
+    align-self: flex-end;
+  }
+  .nav .title .Algo {
+    color: #2a2a73;
+    text-decoration: none;
+    font-size: 4em;
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: 600;
+  
+  }
+  .nav .links a {
+    align-self: center;
+    text-decoration: none;
+    font-size: 2em;
+    font-family: FreeSans;
+    font-style: normal;
+    font-weight: bold;
+    color: #161618;
+  
+    margin-right: 20px;
+    margin-left: 20px;
+  }
+  
+  .nav .links .about{
+    color: #BCB733;
+    /* border: 3px solid #BCB733; */
+  }
+  
+  
+  ul {
+    list-style-type: none;
+  }
+  
+  ul > li > .Algo {
+    float: left;
+  }
+  ul li {
+    display: inline;
+  }
+
+  .splash {
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding-top: 70px;
+    padding-left: 125px;
+
+  }
+  .splash .infotext{
+    font-family: FreeSans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 30px;
+    /* line-height: 54px; */
+    display: flex;
+    align-items: center;
+    
+    color: rgba(35, 32, 66, 0.89);
+  }
+
+  /* .rectangle_large{
+    position: absolute;
+    /* width: 258px;
+    height: 695px;
+    left: 1374px;
+    top: 385px;
+    
+    background: rgba(221, 205, 201, 0.51);
+    mix-blend-mode: multiply;
+    filter: blur(6px);
+  }
+
+  .rectangle_medium{
+    position: absolute;
+    width: 258px;
+    height: 540px;
+    left: 1082px;
+    top: 540px;
+    
+    background: rgba(240, 190, 235, 0.46);
+    mix-blend-mode: multiply;
+    filter: blur(6px);
+  }
+
+  .rectangle_small{
+    position: absolute;
+    width: 258px;
+    height: 290px;
+    left: 790px;
+    top: 790px;
+    
+    background: rgba(190, 171, 191, 0.46);
+    mix-blend-mode: multiply;
+    filter: blur(6px);
+  } */
