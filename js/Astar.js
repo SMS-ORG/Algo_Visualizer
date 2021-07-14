@@ -1,4 +1,4 @@
-import {drawsmallRectangles} from './canvas.js';
+import {drawsmallRectangles, Utils} from './canvas.js';
 //state variables
 const Astar={
     inputedPos : [],
@@ -251,9 +251,8 @@ function Astarfunc()
         current = getLowestFscoreNode(openSet, f_score);
 
         if( isSame(current.gPos(), end.gPos()) ){
-            let man=reconstructPath(camefrom, current);
-            drawsmallRectangles(man);
-            // console.log("done");
+            Utils.queue=reconstructPath(camefrom, current);
+            drawsmallRectangles();
             return;
         }
 

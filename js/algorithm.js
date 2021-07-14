@@ -1,152 +1,237 @@
-import {Utils, main, makeReady, sort, obtainMousePosition} from "./canvas.js";
+import {
+  drawBars,
+  sort,
+  makeReady,
+  obtainMousePosition,
+  Utils,
+} from "./canvas.js";
 var toggler = "bubblesort";
-const drawmode = [0x001, 0x002, 0x004, 0x008]; //lookuptable [newstart, newend, removemode, insertmode]
 var mousedownID = -1;
+const drawmode = [0x001, 0x002, 0x004, 0x008]; //lookuptable [newstart, newend, removemode, insertmode]
 
-//Add active class to Selected links
-const changeActive = (_tog)=>{
-    document.getElementById(toggler).classList.toggle("active");
-    toggler = _tog;
-    document.getElementById(toggler).classList.toggle("active");
+const HTML = [
+  "<h1>Algo Visualizer</h1>" +
+    "<hr>" +
+    "<p>Algo-Visualizer is intended to be a graphical visualizer of how sorting algorithms do<br>" +
+    "sort the data structure and data structures handle the data in an order.The main aim of<br>" +
+    "the algo visualizer is to present learners with a visual way to understand the way most<br>" +
+    "common algorithm works and how different approaches can yield different results in<br>" +
+    "different condition.<br>" +
+    "<br>" +
+    "Algo-Visualizer is intended to help novice programmers understand the intricacies of<br>" +
+    "sorting and pathfinding algorithms. This applet will be written in JavaScript with an<br>" +
+    "aim to popularize a visualization method as a pedagogical tool to teach/learn algorithms.</p><br>",
+];
+
+const introduction = document.getElementById("introduction");
+const changeCanvasSize =function(){ 
+  let slider = document.getElementById("myRange");
+  let width = 800;
+  let height = 500;
+  if(window.innerWidth > 1000){
+    width = 800;
+    Utils.Sorting.width = 8;
+    Utils.Sorting.space = 4;
+    slider.setAttribute('max', 65);
+    slider.setAttribute('value',30);
+    slider.setAttribute('value',5);
+  }else{
+    width = 475;
+    Utils.Sorting.width = 4;
+    Utils.Sorting.space = 2;
+    slider.setAttribute('max', 35);
+    slider.setAttribute('value',20);
+    slider.setAttribute('min',15);
+  }
+  document.querySelectorAll("canvas").forEach(element => {
+    element.width= width;
+    element.height = height;
+  });
 }
 
-
+const changeActive = (_tog, pos = 0) => {
+  document.getElementById(toggler).classList.toggle("active");
+  toggler = _tog;
+  document.getElementById(toggler).classList.toggle("active");
+  introduction.innerHTML = HTML[pos];
+};
 
 //switch radio buttons
 function checkRadio(event) {
-    Utils.Drawmodes = drawmode[this.value-1];
-
+  Utils.Drawmodes = drawmode[this.value - 1];
 }
 
 function mousedown(event) {
-    obtainMousePosition(event);
-    if (mousedownID == -1) {  //Prevent multiple loops!
-        mousedownID = setInterval(
-            () => {
-                let element = document.getElementById("CANVAS");
-                element.onmousemove = obtainMousePosition;
-                //    element.onmousedown=obtainMousePosition;
-            },
-            100); /*execute every 100ms*/
-    }
+  obtainMousePosition(event);
+  if (mousedownID == -1) {
+    //Prevent multiple loops!
+    mousedownID = setInterval(() => {
+      let element = document.getElementById("CANVAS");
+      element.onmousemove = obtainMousePosition;
+      //    element.onmousedown=obtainMousePosition;
+    }, 100); /*execute every 100ms*/
+  }
 }
 
 function mouseup(event) {
-    if (mousedownID != -1) {  //Only stop if exists
-        clearInterval(mousedownID);
-        let element = document.getElementById("CANVAS");
-        element.onmousemove = null;
-        mousedownID = -1;
-    }
+  if (mousedownID != -1) {
+    //Only stop if exists
+    clearInterval(mousedownID);
+    let element = document.getElementById("CANVAS");
+    element.onmousemove = null;
+    mousedownID = -1;
+  }
 }
 
-const BubbleSort = ()=>{ 
-    makeReady(1, [mousedown, mouseup]);
-    changeActive("bubblesort"); 
-    };                                      //function for bubblesort
+const BubbleSort = () => {
+  makeReady(1, [mousedown, mouseup]);
+  changeActive("bubblesort");
+}; //function for bubblesort
 
-const HeapSort = ()=>{ 
-    makeReady(1, [mousedown, mouseup]);
-    changeActive("heapsort");
-    };                                      //function for Heapsort
+const HeapSort = () => {
+  makeReady(1, [mousedown, mouseup]);
+  changeActive("heapsort");
+}; //function for Heapsort
 
-const QuickSort = ()=>{ 
-    makeReady(1, [mousedown, mouseup]);
-    changeActive("quicksort")               //function for quicksort
-    }; 
-const MergeSort = ()=>{ 
-    makeReady(1, [mousedown, mouseup]);
-    changeActive("mergesort");
-    };                                      //function for MergeSort
+const QuickSort = () => {
+  makeReady(1, [mousedown, mouseup]);
+  changeActive("quicksort"); //function for quicksort
+};
+const MergeSort = () => {
+  makeReady(1, [mousedown, mouseup]);
+  changeActive("mergesort");
+}; //function for MergeSort
 
-const PathFind = ()=>{ 
-    makeReady(2, [mousedown, mouseup]);
-    changeActive("pathfind");
-    };                                      //function for Path Finding Algorithm
+const PathFind = () => {
+  makeReady(2, [mousedown, mouseup]);
+  changeActive("pathfind");
+}; //function for Path Finding Algorithm
 
-const Linkedlist = ()=>{
-    changeActive("linkedlist");
-};                                          //function for Linked List
+const Linkedlist = () => {
+  makeReady(3, [mousedown, mouseup]);
+  changeActive("linkedlist");
+}; //function for Linked List
 
-const Bst = ()=>{
-    changeActive("bst");                    //function for Bst
-}
+const Bst = () => {
+  makeReady(3, [mousedown, mouseup]);
+  changeActive("bst"); //function for Bst
+};
 
 function Sortingmethod() {
-    if (toggler) {
-        if (toggler === "pathfind" || toggler === "bst" || toggler === "linkedlist") {
-            sort(toggler);
-            return;
-        }
-    
-        if (Utils.Sorting.arr.length == 0) {
-            alert("Slide on the slider");
-        } else {
-            sort(toggler, Utils.Sorting.arr);
-        }
-    } else {
-        alert("Select A Method First");
-    }
+  if (toggler) {
+    sort(toggler);
+  } else {
+    alert("Select A Method First");
+  }
 }
 
 (function (window, document, undefined) {
+  // code that should be taken care of right away
+  window.onload = init;
 
-    // code that should be taken care of right away
-    window.onload = init;
+  function init() {
+    let slider = document.getElementById("myRange");
 
-    function init() {
-        // the code to be called when the dom has loaded
-        // #document has its nodes
-        document.getElementById("bubblesort").addEventListener("click", BubbleSort, false);
-        document.getElementById("quicksort").addEventListener("click", QuickSort, false);
-        document.getElementById("heapsort").addEventListener("click", HeapSort, false);
-        document.getElementById("mergesort").addEventListener("click", MergeSort, false);
-        document.getElementById("pathfind").addEventListener("click", PathFind, false);
-        document.getElementById("bst").addEventListener("click", Bst, false);
-        document.getElementById("linkedlist").addEventListener("click", Linkedlist, false);
+    // the code to be called when the dom has loaded
+    document
+      .getElementById("bubblesort")
+      .addEventListener("click", BubbleSort, false);
+    document
+      .getElementById("quicksort")
+      .addEventListener("click", QuickSort, false);
+    document
+      .getElementById("heapsort")
+      .addEventListener("click", HeapSort, false);
+    document
+      .getElementById("mergesort")
+      .addEventListener("click", MergeSort, false);
+    document
+      .getElementById("pathfind")
+      .addEventListener("click", PathFind, false);
+    document.getElementById("bst").addEventListener("click", Bst, false);
+    document
+      .getElementById("linkedlist")
+      .addEventListener("click", Linkedlist, false);
 
+    window.addEventListener('resize',changeCanvasSize);
+    changeCanvasSize();
 
-        document.getElementById("insert").addEventListener("click", checkRadio);
-        document.getElementById("deleteNode").addEventListener("click", checkRadio);
-        document.getElementById("insertEnd").addEventListener("click", checkRadio);
-        document.getElementById("insertStart").addEventListener("click", checkRadio);
+    document.getElementById("insert").addEventListener("click", checkRadio);
+    document.getElementById("deleteNode").addEventListener("click", checkRadio);
+    document.getElementById("insertEnd").addEventListener("click", checkRadio);
+    document
+      .getElementById("insertStart")
+      .addEventListener("click", checkRadio);
 
-        document.getElementById("playPause").addEventListener("click", ()=>{
-            var playPause = document.getElementById("playPause");
-            if(!Utils.AnimationController.playing){
-                Utils.AnimationController.cancelAnimation();
-                Utils.AnimationController.playing = true;
-                Utils.AnimationController.frameRate = Utils.AnimationController.recentFrameRate;
-                playPause.classList.toggle("paused");
-                Sortingmethod();
-            }
-            if (playPause.classList.length == 1){
-                Utils.AnimationController.recentFrameRate = Utils.AnimationController.frameRate;
-                Utils.AnimationController.frameRate = 100000;
-                playPause.classList.toggle("paused");
-            }else{
-                Utils.AnimationController.frameRate = Utils.AnimationController.recentFrameRate;
-                playPause.classList.toggle("paused");
-            }
-        });
-        var radioBut = document.querySelectorAll('input[type=radio][name="Insert"]');
-        radioBut.forEach(element => 
-            {
-                element.addEventListener("change",checkRadio);
-            }
-        );
-        radioBut.forEach(element=>
-            {
-                element.disabled = true;
-            });
-        
-        document.getElementById('canvas').style.visibility = "hidden";
-        let slider = document.getElementById("myRange");
+    document.getElementById("playPause").addEventListener("click", () => {
+      var playPause = document.getElementById("playPause");
+      if (!Utils.AnimationController.playing) {
+        Utils.AnimationController.cancelAnimation();
+        Utils.AnimationController.playing = true;
+        Utils.AnimationController.queueIncrement = 1;
+        Utils.AnimationController.frameRate = Utils.AnimationController.recentFrameRate;
+        playPause.classList.toggle("paused");
+        Sortingmethod();
+      }
+      if (playPause.classList.length == 1) {
+        Utils.AnimationController.recentFrameRate =
+          Utils.AnimationController.frameRate;
+        Utils.AnimationController.frameRate = 100000;
+        playPause.classList.toggle("paused");
+      } else {
+        Utils.AnimationController.frameRate =
+          Utils.AnimationController.recentFrameRate;
+        playPause.classList.toggle("paused");
+      }
+    });
 
-        slider.oninput = function () {
-            Utils.Sorting.newarray(slider.value);
-            main(Utils.Sorting.arr);
-        }
+    document.getElementById("about").onclick = () => {
+      makeReady(4, [mousedown, mouseup]);
+    };
+
+    var radioBut = document.querySelectorAll(
+      'input[type=radio][name="Insert"]'
+    );
+    radioBut.forEach((element) => {
+      element.addEventListener("change", checkRadio);
+    });
+    radioBut.forEach((element) => {
+      element.disabled = true;
+    });
+
+    let frameSlider = document.getElementById("frameSlider");
+    frameSlider.oninput = function () {
+      Utils.AnimationController.frameRate = frameSlider.value;
+      Utils.AnimationController.recentFrameRate = frameSlider.value;
+    };
+
+    slider.oninput = function () {
+      Utils.Sorting.newarray(slider.value);
+      if(Utils.AnimationController.playing)
+      {
+        Utils.AnimationController.playing = false;
+      }
+      drawBars("red");
+    };
+
+    document.getElementById("arrow-right").addEventListener("click",
+    ()=>{
+      if(Utils.AnimationController.queueIncrement < 0){
+        Utils.AnimationController.preventIncrement = true;
+      }
+      Utils.AnimationController.queueIncrement = 1;
     }
+    );
 
+    document.getElementById("arrow-left").addEventListener("click",
+    ()=>{
+      if(Utils.AnimationController.queueIncrement > 0){
+        Utils.AnimationController.preventIncrement = true;
+      }
+      Utils.AnimationController.queueIncrement = -1;
+    }
+    );
+
+    introduction.innerHTML = HTML[0];
+  }
 })(window, document, undefined);

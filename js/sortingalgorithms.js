@@ -1,11 +1,14 @@
 //sorting algorithms 
+let noofcomparisions = 0;
+
 function bubblesort(arr) {
+    noofcomparisions = 0;
     let queue = [];
     for (let i = 0; i < arr.length - 1; i++) {
         for (let k = 0; k < arr.length - i - 1; k++) {
-            queue.push([k, k + 1, false]);
+            queue.push([k, k + 1, false, noofcomparisions++]);
             if (arr[k] >= arr[k + 1]) {
-                queue.push([k, k + 1, true]);
+                queue.push([k, k + 1, true, noofcomparisions]);
                 [arr[k], arr[k + 1]] = [arr[k + 1], arr[k]]; //destructure assignment
             }
         }
@@ -19,18 +22,18 @@ function partition(arr, low, high, queue) {
     let m = low;
     for (let i = low; i < high; i++) {
         if (m != i) {
-            queue.push([m, i, false]);
+            queue.push([m, i, false, noofcomparisions++]);
         }
         if (arr[i] <= key) {
             if (m != i) {
-                queue.push([m, i, true]);
+                queue.push([m, i, true, noofcomparisions]);
             }
             [arr[m], arr[i]] = [arr[i], arr[m]];
             m++;
         }
     }
     if (m != high) {
-        queue.push([m, high, true]);
+        queue.push([m, high, true, noofcomparisions]);
     }
     [arr[high], arr[m]] = [arr[m], arr[high]];
     return m;
@@ -39,6 +42,7 @@ function partition(arr, low, high, queue) {
 //quicksort function end value pivot
 function quicksort(arr, low, high, queue = null) {
     if (!queue) {
+        noofcomparisions = 0;
         queue = [];
     }
     if (low >= high) {
@@ -61,9 +65,9 @@ function heapify(arr, n, i, queue) {
 
     if (l < n) {
         if (l < largest) {
-            queue.push([l, largest, false]);
+            queue.push([l, largest, false, noofcomparisions++]);
         } else {
-            queue.push([largest, l, false]);
+            queue.push([largest, l, false, noofcomparisions++]);
         }
         if (arr[l] > arr[largest]) {
             largest = l;
@@ -71,9 +75,9 @@ function heapify(arr, n, i, queue) {
     }
     if (r < n) {
         if (r < largest) {
-            queue.push([r, largest, false]);
+            queue.push([r, largest, false, noofcomparisions++]);
         } else {
-            queue.push([largest, r, false]);
+            queue.push([largest, r, false, noofcomparisions++]);
         }
         if (arr[r] > arr[largest]) {
             largest = r;
@@ -81,9 +85,9 @@ function heapify(arr, n, i, queue) {
     }
     if (largest != i) {
         if (i > largest) {
-            queue.push([largest, i, true]);
+            queue.push([largest, i, true, noofcomparisions]);
         } else {
-            queue.push([i, largest, true]);
+            queue.push([i, largest, true, noofcomparisions]);
         }
         [arr[i], arr[largest]] = [arr[largest], arr[i]];
         heapify(arr, n, largest, queue);
@@ -92,13 +96,14 @@ function heapify(arr, n, i, queue) {
 
 //function heap sort
 function heapsort(arr, n) {
+    noofcomparisions = 0;
     let queue = [];
     for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
         heapify(arr, n, i, queue);
     }
     for (let i = n - 1; i >= 0; i--) {
         [arr[0], arr[i]] = [arr[i], arr[0]];
-        queue.push([0, i, true]);
+        queue.push([0, i, true, noofcomparisions]);
         heapify(arr, i, 0, queue);
     }
     return queue;
@@ -116,7 +121,7 @@ function merge(arr, start, mid, end, queue) {
     // Two pointers to maintain start
     // of both arrays to merge
     while (start <= mid && start2 <= end) {
-        queue.push([start, start2, false]);
+        queue.push([start, start2, false, noofcomparisions++]);
         // If element 1 is in right place
         if (arr[start] <= arr[start2]) {
             start++;
@@ -128,10 +133,10 @@ function merge(arr, start, mid, end, queue) {
             // element 2, right by 1.
             while (index != start) {
                 [arr[index], arr[index - 1]] = [arr[index - 1], arr[index]];
-                queue.push([index - 1, index, true]);
+                queue.push([index - 1, index, true, noofcomparisions]);
                 index--;
             }
-            queue.push([start, index, true]);
+            queue.push([start, index, true, noofcomparisions]);
             [arr[start], arr[index]] = [arr[index], arr[start]];
 
             // Update all the pointers
@@ -146,6 +151,7 @@ function merge(arr, start, mid, end, queue) {
 function mergesort(arr, l, r, queue = null) {
     if (!queue) {
         queue = [];
+        noofcomparisions = 0;
     }
     if (l < r) {
         let m = Math.floor(l + (r - l) / 2);
@@ -156,4 +162,4 @@ function mergesort(arr, l, r, queue = null) {
     }
 }
 
-export { bubblesort, quicksort, heapsort, mergesort };
+export { bubblesort, quicksort, heapsort, mergesort }
