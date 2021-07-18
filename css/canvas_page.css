@@ -242,7 +242,7 @@ input[type="range"][orient="vertical"] {
   z-index: 4;
 }
 
-.about .close-btn {
+#intro #close-btn {
   height: 3rem;
   width: 3rem;
   border-radius: 1.5rem;
@@ -253,14 +253,14 @@ input[type="range"][orient="vertical"] {
   place-items: center;
 }
 
-.about .close-btn ion-icon {
+#intro #close-btn ion-icon {
   font-size: 2rem;
   color: rgb(100, 100, 100);
   cursor: pointer;
   transition: hover 200ms ease;
 }
 
-.about .close-btn:hover {
+#intro #close-btn:hover {
   background: #cfdffc;
 }
 
@@ -268,6 +268,20 @@ input[type="range"][orient="vertical"] {
   font-family: "Playfair Display", "serif";
   text-align: center;
   color: rgb(100, 100, 100);
+}
+
+#intro{
+  display: grid;
+  place-items: center;
+  width: 50rem;
+  height: 25rem;
+  border-radius: 2rem;
+  background: #d7e6ff;
+  padding: 2rem;
+  position:absolute;
+  top: 140px;
+  left: 12px;
+  z-index: 4;
 }
 
 @media screen and (max-width:900px) {

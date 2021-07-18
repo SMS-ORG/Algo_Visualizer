@@ -563,6 +563,7 @@ const Utils = {
 };
 var line = new Line(Utils.Webglv);
 var bars = new Rectangle(Utils.Webglv);
+var circle = new Circle(Utils.Webglv);
 var queue_element;
 
 function getStartingpointofrectdraw() {
@@ -637,13 +638,13 @@ function drawSortedElements() {
           Utils.Sorting.arr_y[i],
         ];
         bars.setColor("green");
-      } 
+      }
       else if (queue_element[2] && queue_element[1] == i) {
         bars.setColor("green");
-      } 
+      }
       else if (queue_element[0] == i || queue_element[1] == i) {
         bars.setColor("blue");
-      } 
+      }
       else {
         bars.setColor("red");
       }
@@ -672,7 +673,7 @@ function drawSortedElements() {
       Utils.AnimationController.queueIndex = Utils.AnimationController.queueIndex + Utils.AnimationController.queueIncrement;
     }
   }
-  
+
   if (Utils.AnimationController.queueIndex <= Utils.queue.length - 1 && Utils.AnimationController.queueIndex >= 0) {
     getStartingpointofrectdraw();
     Utils.AnimationController.animationNo = window.requestAnimationFrame(drawSortedElements);
@@ -686,7 +687,6 @@ function drawSortedElements() {
 
 //function for drawing trees
 function drawTree(NodeOfTree, flag) {
-  const ctx = Utils.ctx;
   const { radiusofCircle: radCircle, distanceofLine: dLine } = Utils.Circle;
 
   let previous_time = Date.now();
@@ -699,19 +699,15 @@ function drawTree(NodeOfTree, flag) {
 
   let Dir = 1; // to fo right
 
-  let circle = new Circle(Utils.Webglv);
-  let line = new Line(Utils.Webglv);
-
   let funcCallback;
 
   let drawLinked = function () {
     var node = NodeOfTree;
-    var now, elapsed_time;
-    now = Date.now();
-    elapsed_time = now - previous_time;
-    if (elapsed_time >= Utils.AnimationController.frameRate) {
+    Utils.AnimationController.now = Date.now();
+    Utils.AnimationController.elapsed_time = Utils.AnimationController.now - Utils.AnimationController.time;
+    if (Utils.AnimationController.elapsed_time >= Utils.AnimationController.frameRate) {
       Utils.Webglv.clear();
-      ctx.clear();
+      Utils.ctx.clear();
       while (node != null) {
         if (node.recentInsert) {
           circle.setColor("green");
@@ -722,8 +718,7 @@ function drawTree(NodeOfTree, flag) {
         circle.setGeometry(x, y, radCircle);
         // Render the scene
         circle.draw();
-        ctx.draw(node.value.toString(), [x - 10, y + 5]);
-
+        Utils.ctx.draw(node.value.toString(), [x - 10, y + 5]);
         let temp1 = x;
         let temp2 = y;
 
@@ -738,7 +733,7 @@ function drawTree(NodeOfTree, flag) {
           line.setGeometryp(temp1, temp2 - radCircle, temp1, y + radCircle);
           line.draw();
           node = node.next;
-          previous_time = now;
+          Utils.AnimationController.time = Utils.AnimationController.now;
           if (Dir === 3) {
             Dir = 2;
           } else {
@@ -755,13 +750,12 @@ function drawTree(NodeOfTree, flag) {
         }
         line.draw();
         node = node.next;
-        previous_time = now;
+        Utils.AnimationController.time = Utils.AnimationController.now;
       }
       Utils.AnimationController.cancelAnimation();
       Utils.AnimationController.playing = false;
     } else {
-      Utils.AnimationController.animationNo =
-        window.requestAnimationFrame(funcCallback);
+      Utils.AnimationController.animationNo = window.requestAnimationFrame(funcCallback);
     }
   };
 
@@ -803,11 +797,11 @@ function drawGrid() {
   height = Math.floor(height / gap) * gap;
 
   for (let i = 10; i <= width; i = i + gap) {
-    line.setGeometryp(i, 10, i, height-10);
+    line.setGeometryp(i, 10, i, height - 10);
     line.setColor("black");
     line.draw();
   }
-  for(let i =10;i <= height;i = i + gap){
+  for (let i = 10; i <= height; i = i + gap) {
     line.setGeometryp(10, i, width - 10, i);
     line.setColor("black");
     line.draw();
@@ -854,7 +848,7 @@ function makeReady(flag, functions) {
   } else if (flag === 3) {
     Utils.ctx.clear();
     Utils.Webglv.clear();
-
+    document.getElementById("canvas").style.zIndex = 3;
     clearResourcesSort(functions);
     clearResourcesPathFind(functions);
   } else {
@@ -891,15 +885,15 @@ function drawInputpos() {
 
 function drawsmallRectangles() {
   Utils.AnimationController.now = Date.now();
-    Utils.AnimationController.elapsed_time = Utils.AnimationController.now - Utils.AnimationController.time;
-  if(Utils.AnimationController.playing){
+  Utils.AnimationController.elapsed_time = Utils.AnimationController.now - Utils.AnimationController.time;
+  if (Utils.AnimationController.playing) {
     let pos;
     if (Utils.AnimationController.elapsed_time >= Utils.AnimationController.frameRate) {
       drawGrid();
       drawInputpos();
-      for (let i = 0; i <= Utils.AnimationController.queueIndex ; i++) {
+      for (let i = 0; i <= Utils.AnimationController.queueIndex; i++) {
         if (
-          Utils.queue[i].isBarrier()||
+          Utils.queue[i].isBarrier() ||
           Utils.queue[i].isEnd() ||
           Utils.queue[i].isStart()
         ) {
@@ -919,15 +913,15 @@ function drawsmallRectangles() {
       Utils.AnimationController.time = Utils.AnimationController.now;
       Utils.AnimationController.queueIndex = Utils.AnimationController.queueIndex + Utils.AnimationController.queueIncrement;
     }
-    if (Utils.AnimationController.queueIndex <= Utils.queue.length-1 && Utils.AnimationController.queueIndex >= 0) {
+    if (Utils.AnimationController.queueIndex <= Utils.queue.length - 1 && Utils.AnimationController.queueIndex >= 0) {
       Utils.AnimationController.animationNo = window.requestAnimationFrame(drawsmallRectangles);
-    } 
+    }
     else {
       Utils.AnimationController.cancelAnimation();
       Utils.AnimationController.playing = false;
     }
   }
-  else{
+  else {
     drawGrid();
     drawInputpos();
   }

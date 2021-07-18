@@ -11,40 +11,42 @@ const drawmode = [0x001, 0x002, 0x004, 0x008]; //lookuptable [newstart, newend, 
 
 const HTML = [
   "<h1>Algo Visualizer</h1>" +
-    "<hr>" +
-    "<p>Algo-Visualizer is intended to be a graphical visualizer of how sorting algorithms do<br>" +
-    "sort the data structure and data structures handle the data in an order.The main aim of<br>" +
-    "the algo visualizer is to present learners with a visual way to understand the way most<br>" +
-    "common algorithm works and how different approaches can yield different results in<br>" +
-    "different condition.<br>" +
-    "<br>" +
-    "Algo-Visualizer is intended to help novice programmers understand the intricacies of<br>" +
-    "sorting and pathfinding algorithms. This applet will be written in JavaScript with an<br>" +
-    "aim to popularize a visualization method as a pedagogical tool to teach/learn algorithms.</p><br>",
+  "<hr>" +
+  "<p>Algo-Visualizer is intended to be a graphical visualizer of how sorting algorithms do<br>" +
+  "sort the data structure and data structures handle the data in an order.The main aim of<br>" +
+  "the algo visualizer is to present learners with a visual way to understand the way most<br>" +
+  "common algorithm works and how different approaches can yield different results in<br>" +
+  "different condition.<br>" +
+  "<br>" +
+  "Algo-Visualizer is intended to help novice programmers understand the intricacies of<br>" +
+  "sorting and pathfinding algorithms. This applet will be written in JavaScript with an<br>" +
+  "aim to popularize a visualization method as a pedagogical tool to teach/learn algorithms.</p><br>",
 ];
 
-const introduction = document.getElementById("introduction");
-const changeCanvasSize =function(){ 
+let introduce = document.getElementById("intro");
+let introduction = document.getElementById("introduction");
+
+const changeCanvasSize = function () {
   let slider = document.getElementById("myRange");
   let width = 800;
   let height = 500;
-  if(window.innerWidth > 1000){
+  if (window.innerWidth > 1000) {
     width = 800;
     Utils.Sorting.width = 8;
     Utils.Sorting.space = 4;
     slider.setAttribute('max', 65);
-    slider.setAttribute('value',30);
-    slider.setAttribute('value',5);
-  }else{
+    slider.setAttribute('value', 30);
+    slider.setAttribute('value', 5);
+  } else {
     width = 475;
     Utils.Sorting.width = 4;
     Utils.Sorting.space = 2;
     slider.setAttribute('max', 35);
-    slider.setAttribute('value',20);
-    slider.setAttribute('min',15);
+    slider.setAttribute('value', 20);
+    slider.setAttribute('min', 15);
   }
   document.querySelectorAll("canvas").forEach(element => {
-    element.width= width;
+    element.width = width;
     element.height = height;
   });
 }
@@ -86,35 +88,42 @@ function mouseup(event) {
 const BubbleSort = () => {
   makeReady(1, [mousedown, mouseup]);
   changeActive("bubblesort");
+  introduction.innerHTML = HTML[0];
 }; //function for bubblesort
 
 const HeapSort = () => {
   makeReady(1, [mousedown, mouseup]);
   changeActive("heapsort");
+  introduction.innerHTML = HTML[0];
 }; //function for Heapsort
 
 const QuickSort = () => {
   makeReady(1, [mousedown, mouseup]);
-  changeActive("quicksort"); //function for quicksort
+  changeActive("quicksort");
+  introduction.innerHTML = HTML[0]; //function for quicksort
 };
 const MergeSort = () => {
   makeReady(1, [mousedown, mouseup]);
   changeActive("mergesort");
+  introduction.innerHTML = HTML[0];
 }; //function for MergeSort
 
 const PathFind = () => {
   makeReady(2, [mousedown, mouseup]);
   changeActive("pathfind");
+  introduction.innerHTML = HTML[0];
 }; //function for Path Finding Algorithm
 
 const Linkedlist = () => {
   makeReady(3, [mousedown, mouseup]);
   changeActive("linkedlist");
+  introduction.innerHTML = HTML[0];
 }; //function for Linked List
 
 const Bst = () => {
   makeReady(3, [mousedown, mouseup]);
-  changeActive("bst"); //function for Bst
+  changeActive("bst"); 
+  introduction.innerHTML = HTML[0];//function for Bst
 };
 
 function Sortingmethod() {
@@ -133,6 +142,8 @@ function Sortingmethod() {
     let slider = document.getElementById("myRange");
 
     // the code to be called when the dom has loaded
+
+    //Event Listeners For ID's
     document
       .getElementById("bubblesort")
       .addEventListener("click", BubbleSort, false);
@@ -153,7 +164,7 @@ function Sortingmethod() {
       .getElementById("linkedlist")
       .addEventListener("click", Linkedlist, false);
 
-    window.addEventListener('resize',changeCanvasSize);
+    window.addEventListener('resize', changeCanvasSize);
     changeCanvasSize();
 
     document.getElementById("insert").addEventListener("click", checkRadio);
@@ -163,6 +174,8 @@ function Sortingmethod() {
       .getElementById("insertStart")
       .addEventListener("click", checkRadio);
 
+
+    //Main PlayPause Slider
     document.getElementById("playPause").addEventListener("click", () => {
       var playPause = document.getElementById("playPause");
       if (!Utils.AnimationController.playing) {
@@ -185,10 +198,32 @@ function Sortingmethod() {
       }
     });
 
+    //rewind and forward buttons
+    document.getElementById("arrow-right").addEventListener("click",
+      () => {
+        if (Utils.AnimationController.queueIncrement < 0) {
+          Utils.AnimationController.preventIncrement = true;
+        }
+        Utils.AnimationController.queueIncrement = 1;
+      }
+    );
+
+    document.getElementById("arrow-left").addEventListener("click",
+      () => {
+        if (Utils.AnimationController.queueIncrement > 0) {
+          Utils.AnimationController.preventIncrement = true;
+        }
+        Utils.AnimationController.queueIncrement = -1;
+      }
+    );
+
+
     document.getElementById("about").onclick = () => {
       makeReady(4, [mousedown, mouseup]);
     };
 
+
+    //Radio Buttons for posistioning start, end ... for A* algorithm visualizer
     var radioBut = document.querySelectorAll(
       'input[type=radio][name="Insert"]'
     );
@@ -199,6 +234,9 @@ function Sortingmethod() {
       element.disabled = true;
     });
 
+
+
+    //frame slidder for forming new array sorting
     let frameSlider = document.getElementById("frameSlider");
     frameSlider.oninput = function () {
       Utils.AnimationController.frameRate = frameSlider.value;
@@ -207,31 +245,21 @@ function Sortingmethod() {
 
     slider.oninput = function () {
       Utils.Sorting.newarray(slider.value);
-      if(Utils.AnimationController.playing)
-      {
+      if (Utils.AnimationController.playing) {
         Utils.AnimationController.playing = false;
       }
       drawBars("red");
     };
 
-    document.getElementById("arrow-right").addEventListener("click",
-    ()=>{
-      if(Utils.AnimationController.queueIncrement < 0){
-        Utils.AnimationController.preventIncrement = true;
-      }
-      Utils.AnimationController.queueIncrement = 1;
+    //on click abot button pop introduction 
+    document.getElementById('introduce').addEventListener('click',()=>{
+      introduce.style.display = 'grid';
     }
     );
-
-    document.getElementById("arrow-left").addEventListener("click",
-    ()=>{
-      if(Utils.AnimationController.queueIncrement > 0){
-        Utils.AnimationController.preventIncrement = true;
-      }
-      Utils.AnimationController.queueIncrement = -1;
-    }
-    );
-
+    document.getElementById('close-btn').addEventListener("click",()=>{
+      introduce.style.display = "none";
+    });
     introduction.innerHTML = HTML[0];
+    introduce.style.display = "none";
   }
-})(window, document, undefined);
+}) (window, document, undefined);
