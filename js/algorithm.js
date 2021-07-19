@@ -230,10 +230,8 @@ function Sortingmethod() {
     radioBut.forEach((element) => {
       element.addEventListener("change", checkRadio);
     });
-    radioBut.forEach((element) => {
-      element.disabled = true;
-    });
-
+    
+    document.getElementById("radio_container").style.display = 'none';
 
 
     //frame slidder for forming new array sorting

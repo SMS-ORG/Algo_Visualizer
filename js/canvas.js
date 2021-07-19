@@ -5,7 +5,7 @@ import {
   mergesort,
 } from "./sortingalgorithms.js";
 import { Astar, Astarfunc, makeGrid, updateGrid } from "./Astar.js";
-import { Linked, Bst } from "./datastructures.js";
+import { Linked, Bst, LinBst } from "./datastructures.js";
 
 class Webgraphics {
   //requires id of canvas and webgl type
@@ -686,34 +686,52 @@ function drawSortedElements() {
 }
 
 //function for drawing trees
-function drawTree(NodeOfTree, flag) {
+async function drawTree() {
   const { radiusofCircle: radCircle, distanceofLine: dLine } = Utils.Circle;
-
-  let previous_time = Date.now();
-
   let gap = 3 * radCircle + dLine;
-
   let resCanvas = Utils.canvas.getRes();
-  let y = resCanvas[1] - radCircle - 10;
-  let x = radCircle + 10;
-
-  let Dir = 1; // to fo right
-
-  let funcCallback;
+  let x,y;
+  let Dir; // to fo right
+ 
 
   let drawLinked = function () {
-    var node = NodeOfTree;
+    x = radCircle + 10;
+    y = resCanvas[1] - radCircle - 10   - 90;
+    Dir = 1;
+    var node;
     Utils.AnimationController.now = Date.now();
     Utils.AnimationController.elapsed_time = Utils.AnimationController.now - Utils.AnimationController.time;
     if (Utils.AnimationController.elapsed_time >= Utils.AnimationController.frameRate) {
       Utils.Webglv.clear();
       Utils.ctx.clear();
+      Utils.ctx.draw( 
+      "Length: " +
+      LinBst.Link.size.toString(),
+      [10, 470]
+      );
+      line.setGeometryp(0, 468, 800, 468);
+      line.draw();
+      node = LinBst.Link.root;
       while (node != null) {
-        if (node.recentInsert) {
-          circle.setColor("green");
-        } else {
-          circle.setColor("red");
+        circle.setColor("red");
+        for(let i=0;i<=Utils.AnimationController.queueIndex;i++)
+        {
+          queue_element =  Utils.queue[i];
+          if(node.value === queue_element[0])
+          {
+            if(queue_element[1]===1 || queue_element[1]===4)
+            {
+              circle.setColor("green");
+              break;
+            }
+            else if(queue_element[1]===3)
+            {
+              circle.setColor("blue");
+              break;
+            }
+          }
         }
+        
         line.setColor("black");
         circle.setGeometry(x, y, radCircle);
         // Render the scene
@@ -750,43 +768,35 @@ function drawTree(NodeOfTree, flag) {
         }
         line.draw();
         node = node.next;
-        Utils.AnimationController.time = Utils.AnimationController.now;
       }
-      Utils.AnimationController.cancelAnimation();
-      Utils.AnimationController.playing = false;
-    } else {
-      Utils.AnimationController.animationNo = window.requestAnimationFrame(funcCallback);
+      
+      Utils.AnimationController.queueIndex = Utils.AnimationController.queueIndex + Utils.AnimationController.queueIncrement;
+      if(Utils.AnimationController.queueIndex === Utils.queue.length-1)
+      {
+        if(Utils.queue[Utils.queue.length-1][1]===1 && !LinBst.Contained(Utils.queue[Utils.queue.length-1][0]))
+        {
+          LinBst.Link.setValue(Utils.queue[Utils.queue.length-1][0],[]);
+        }
+        else if(Utils.queue[Utils.queue.length-1][1]===2 && LinBst.Contained(Utils.queue[Utils.queue.length-1][0])){
+          LinBst.Link.deleteKey(Utils.queue[Utils.queue.length-1][0],[]);
+        }
+      }
+      Utils.AnimationController.time = Utils.AnimationController.now;
+      if(Utils.AnimationController.queueIndex <= Utils.queue.length-1 && Utils.AnimationController.queueIndex >= 0)
+      {
+        Utils.AnimationController.animationNo = window.requestAnimationFrame(drawLinked);
+      }
+      else
+      {
+        Utils.AnimationController.cancelAnimation();
+        Utils.AnimationController.playing = false;
+      }
+    }
+    else {
+      Utils.AnimationController.animationNo = window.requestAnimationFrame(drawLinked);
     }
   };
-
-  let drawBinaryTree = function () {
-    var node = NodeOfTree;
-    var now, elapsed_time;
-    now = Date.now();
-    elapsed_time = now - previous_time;
-    if (elapsed_time >= Utils.AnimationController.frameRate) {
-      Utils.Webglv.clear();
-      ctx.clear();
-
-      line.draw();
-      node = node.next;
-      previous_time = now;
-
-      Utils.AnimationController.cancelAnimation();
-      Utils.AnimationController.playing = false;
-    } else {
-      Utils.AnimationController.animationNo =
-        window.requestAnimationFrame(funcCallback);
-    }
-  };
-
-  if (flag === 1) {
-    funcCallback = drawLinked;
-  } else {
-    funcCallback = drawBinaryTree;
-  }
-  Utils.AnimationController.animationNo =
-    window.requestAnimationFrame(funcCallback);
+  drawLinked();
 }
 
 function drawGrid() {
@@ -815,11 +825,7 @@ const clearResourcesSort = function (functions) {
 
 const clearResourcesPathFind = function (functions) {
   let canv = document.getElementById("CANVAS");
-  document
-    .querySelectorAll('input[type=radio][name="Insert"]')
-    .forEach((element) => {
-      element.disabled = true;
-    });
+  document.getElementById("radio_container").style.display = "none";
   canv.removeEventListener("mousedown", functions[0]);
   canv.removeEventListener("mouseout", functions[1]);
   canv.removeEventListener("mouseup", functions[1]);
@@ -840,11 +846,7 @@ function makeReady(flag, functions) {
     clearResourcesSort(functions);
     drawGrid();
     makeGrid();
-    document
-      .querySelectorAll('input[type=radio][name="Insert"]')
-      .forEach((element) => {
-        element.disabled = false;
-      });
+    document.getElementById("radio_container").style.display = "flex";
   } else if (flag === 3) {
     Utils.ctx.clear();
     Utils.Webglv.clear();
@@ -974,7 +976,7 @@ function sort(sorttype) {
   Utils.AnimationController.queueIndex = 0;
 
   let arr = [].concat(Utils.Sorting.arr);
-  if (sorttype == "bubblesort") {
+  if (sorttype === "bubblesort") {
     Utils.queue = bubblesort(arr);
     callSortfunc = true;
   } else if (sorttype === "quicksort") {
@@ -991,8 +993,16 @@ function sort(sorttype) {
   } else if (sorttype === "bst") {
     Bst(arr[0], arr[1]);
   } else {
-    // Linked(arr[0], arr[1]);
-    Linked();
+    if(LinBst.inputedValues.length!=0){
+      for(let i=0;i<LinBst.inputedValues.length-1;i++)
+      {
+        Linked(LinBst.inputedValues[i][0],LinBst.inputedValues[i][1]);
+      }
+      Linked(LinBst.inputedValues[LinBst.inputedValues.length-1][0],LinBst.inputedValues[LinBst.inputedValues.length-1][1],1);
+      LinBst.inputedValues=[];
+    }
+    console.log(Utils.queue);
+    drawTree();
   }
   if (callSortfunc) {
     Utils.Sorting.arr_y = [].concat(Utils.Sorting.arr);

@@ -274,13 +274,13 @@ input[type="range"][orient="vertical"] {
   display: grid;
   place-items: center;
   width: 50rem;
-  height: 25rem;
+  height: 550px;
   border-radius: 2rem;
   background: #d7e6ff;
   padding: 2rem;
   position:absolute;
   top: 140px;
-  left: 12px;
+  left: 40px;
   z-index: 4;
 }
 

@@ -1,97 +1,130 @@
-import {drawTree} from './canvas.js';
+import {drawTree, Utils} from './canvas.js';
 
-class LinkedList{
-    static size = 0;
-    constructor(key = null ){
+class NodeList{
+    constructor(_val = null)
+    {
         this.next = null;
-        this.value = key;
-        this.recentInsert = false;
-        LinkedList.size ++;
+        this.value = _val;
     }
-
-    setValue(key, self = null){
-        if(this.value === null){
-            this.value = key;
-            this.recentInsert = true;
-            return;
-        }
-
-        else if( self === null ){
-            self = this;
-        }
-
-        if(self.value > key){
-            let node = new LinkedList(self.value);
-            node.next = self.next;
-            self.value = key;
-            self.recentInsert = true;
-            self.next = node;
-        }
-        else if ( self.next === null){
-            let node = new LinkedList(key);
-            node.recentInsert = true;
-            self.next = node;
+}
+class LinkedList{
+    constructor(key = null ){
+        if(key){
+            this.root = new NodeList(key);
+            this.size = 1;
         }
         else{
-            this.setValue(key, self.next);
+            this.size = 0;
+            this.root = null;
         }
     }
 
-    deleteKey(key, self = null){
-        //if first root value is null return
-        if(this.value === null)
+    isEmpty()
+    {
+        if(this.size === 0 || this.root === null)
         {
-            return this;
+            return true;
         }
-        else if( this.value == key)   //if root value is equal to key
-        {  
-            if( this.next != null){   // if next node has a value
-                this.value = this.next.value;
-                this.next = this.next.next;
-            }else{
-                this.value = null;
-            }
-            return this;
+        else{
+            return false;
+        }
+    }
+
+    setRoot(key, queue = null)
+    {
+        if(this.isEmpty())
+        {
+            this.root = new NodeList(key);
+        }
+        else{
+            let node = new NodeList(key);
+            node.next = this.root;
+            this.root = node;
+        }
+        this.size++;
+        queue.push([key, 1]);
+    }
+
+
+    setValue(key, queue = null){
+        if(this.isEmpty())
+        {
+            this.setRoot(key, queue);
+            return;
+        }
+        this.root = this.setnewValue(key, queue, this.root);
+        this.size++;
+    }
+
+    setnewValue(key, queue, self = null)
+    {
+        if(self.value > key)
+        {
+            queue.push([key, 1]);
+            let node = new NodeList(self.value);
+            self.value = key;
+            node.next = self.next;
+            self.next = node;
+            return self;
+        }
+        if(self.next)
+        {
+            queue.push([self.value, 3]);
+            self.next = this.setnewValue(key, queue, self.next);
+        }
+        else
+        {
+            self.next = new NodeList(key);
+            queue.push([key, 1]);
         }
 
-        if(self === null){
-            LinkedList.size --;
-            self = this;
+        return self;
+    }
+
+    deleteKey(key, queue = null){
+        //if first root value is null return
+        if(this.isEmpty())
+        {
+            return;
         }
+        this.root = this.deletetheKey(key, queue, this.root);
+        this.size--;
+    }
+
+    deletetheKey(key, queue, self = null)
+    {
         if (self.value === key){
-            if (self.next != null){
-                self.value = self.next.value;
-                self.next = self.next.next;
-                return self;
-            }
-            else
-            {
-                return null;
-            }
+            queue.push([self.value, 2]);
+            self = self.next;
+            return self;
         }
-        if ( self.next != null){
-            self.next = this.deleteKey(key, self.next);
+        if(self.next){
+            queue.push([self.value, 3]);
+            self.next = this.deletetheKey(key,queue,self.next);
         }
         return self;
     }
 
-    getRoot(){
-        return this.value;
-    }
-
-    clearRecentPriority(){
-        let self = this;
-        while( self!= null){
-            if( self.recentInsert ){
-                self.recentInsert = false;
+    search(key, queue)
+    {
+        let node = this.root;
+        while(node != null)
+        {
+            if(node.value == key)
+            {
+                queue.push([self.value, 4]);
+                break;
             }
-            self = self.next;
+            queue.push([self.value, 3]);
+            node = node.next;
         }
     }
 
-    clearList(){
-        this.value = null;
-        this.next = null;
+    getRoot(){
+        if(!this.isEmpty())
+        {
+            return this.root.value;
+        }
     }
 }
 
@@ -138,58 +171,63 @@ class BST{
             }
         } 
     }
-
-    clearRecentPriority(node = null){
-        if(node === null){
-            node = this;
-        }
-        if(node.right != null){
-            if(node.recentInsert){
-                node.recentInsert = false;
-            }
-            this.clearRecentPriority(node.right);
-        }
-        if(node.left != null){
-            if(node.recentInsert){
-                node.recentInsert = false;
-            }
-            this.clearRecentPriority(node.left);
-        }
-    }
-
-    clearTree(){
-        this.right = null;
-        this.value = null;
-        this.left = null;
-    }
 }
 
 //class that Handles Data Structures data for whole runtime
-class LinBst{
-    static Link = new LinkedList();
-    static Bst = new BST();
+const LinBst={
+    Link : new LinkedList(),
+    Bst : new BST(),
+    inputedValues : [[15,1],[123,1],[12,1],[20,1],[642,1],[123,2],[299,1]],
+    Contained: function(number){
+                    let node = LinBst.Link.root;
+                    while(node!=null)
+                    {
+                        if(node.value === number)
+                        {
+                            return true;
+                        }
+                        node = node.next;
+                    }
+            }
 }
 
-function Linked(mode, number){
-    LinBst.Link.clearRecentPriority();
-    if (mode === 1){
-        LinBst.Link.setValue(number);
-    }
-    else if (mode == 2){
-        LinBst.Link.deleteKey(number);
+
+
+
+function Linked(number, mode, delet = 0){
+    let queue=[];
+    if(LinBst.Contained(number))
+    {
+        if(mode === 1)
+        {
+            alert("Number dublication Restricted");
+            return;
+        }
     }
     else{
-        LinBst.Link.clearList();
+        if(mode === 2)
+        {
+            alert("Number not found");
+        }
     }
-    /* Temp Code */
-    LinBst.Link.setValue(12); // Insert Value into linked list 
-    LinBst.Link.setValue(123);
-    LinBst.Link.setValue(1212);
-    LinBst.Link.setValue(13);
-    LinBst.Link.setValue(124);
-    LinBst.Link.clearRecentPriority();  // The last inserted data value is green Coloured bubble ->
-    LinBst.Link.setValue(13123);        // so Clear Recent Priority makes the coloured bubble normal
-    drawTree(LinBst.Link, 1);  //calls Drawtree with flag value=(1) to draw linked list
+
+    if (mode == 1){
+        LinBst.Link.setValue(number,  queue);
+        if(LinBst.Link.size >= 1 && delet != 0){
+            LinBst.Link.deleteKey(number, []);
+        }
+    }
+    else if(mode == 2 && LinBst.Link.size != 0){
+        LinBst.Link.deleteKey(number, queue);
+        if(delet != 0)
+        {
+            LinBst.Link.setValue(number, []);
+        }
+    }
+    else{
+        LinBst.Link.search(number, queue);
+    }
+    Utils.queue = queue;
 }
 
 function Bst(mode, number){
@@ -206,4 +244,4 @@ function Bst(mode, number){
     drawTree(LinBst.Bst, 2); 
 }
 
-export {Linked, Bst}
+export {Linked, Bst, LinBst};
