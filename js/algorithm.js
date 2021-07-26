@@ -21,7 +21,7 @@ const HTML = [
   "Algo-Visualizer is intended to help novice programmers understand the intricacies of<br>" +
   "sorting and pathfinding algorithms. This applet will be written in JavaScript with an<br>" +
   "aim to popularize a visualization method as a pedagogical tool to teach/learn algorithms.</p><br>",
-];
+]; // look up tables 
 
 let introduce = document.getElementById("intro");
 let introduction = document.getElementById("introduction");

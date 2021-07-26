@@ -290,10 +290,11 @@ class Line {
 
   setGeometry(x, y, distance, angle) {
     var x1 = x;
-    var x2 = Math.floor(Math.cos((angle * Math.PI) / 180)) * distance + x;
+    var x2 = Math.cos((angle * Math.PI) / 180) * distance;
     var y1 = y;
-    var y2 = Math.floor(Math.sin((angle * Math.PI) / 180)) * distance + y;
-    this.position = [x1, y1, x2, y2];
+    var y2 = Math.sin((angle * Math.PI) / 180) * distance;
+    this.position = [x1, y1, x-x2, y-y2];
+    console.log(this.position);
   }
 
   setGeometryp(x, y, x1, y1) {
@@ -489,12 +490,18 @@ class Ctx {
   constructor(CANVAS_ID) {
     this.canvas = document.querySelector(CANVAS_ID);
     this.ctx = this.canvas.getContext("2d");
+    this.setFontSize(20);
   }
 
   draw(text, pos) {
-    this.ctx.font = "20px serif";
     let res = this.canvas.getBoundingClientRect();
     this.ctx.strokeText(text, pos[0], res.height - pos[1]);
+  }
+
+  setFontSize(value = 20)
+  {
+    let font = "serif";
+    this.ctx.font = value.toString()+"px"+" "+font;
   }
 
   clear() {
@@ -544,6 +551,14 @@ const Utils = {
         Utils.canvas.canv.getBoundingClientRect(),
       ];
     },
+  },
+
+  BinarySearchTree:{
+    positions: new Array(),
+    radiusofCircle: 20,
+    distanceofLevels: 50,
+    visitedNode: new Array(),
+    oldBst : null,
   },
   AnimationController: {
     queueIndex: 0,
@@ -686,13 +701,17 @@ function drawSortedElements() {
 }
 
 //function for drawing trees
-async function drawTree() {
+function drawTree() {
   const { radiusofCircle: radCircle, distanceofLine: dLine } = Utils.Circle;
   let gap = 3 * radCircle + dLine;
   let resCanvas = Utils.canvas.getRes();
   let x,y;
   let Dir; // to fo right
- 
+  
+  if(Utils.queue.length === 1 && Utils.queue[0][1] === 2)
+  {
+    LinBst.Link.deleteKey(Utils.queue[0][0], []);
+  }
 
   let drawLinked = function () {
     x = radCircle + 10;
@@ -700,6 +719,7 @@ async function drawTree() {
     Dir = 1;
     var node;
     Utils.AnimationController.now = Date.now();
+    
     Utils.AnimationController.elapsed_time = Utils.AnimationController.now - Utils.AnimationController.time;
     if (Utils.AnimationController.elapsed_time >= Utils.AnimationController.frameRate) {
       Utils.Webglv.clear();
@@ -773,11 +793,11 @@ async function drawTree() {
       Utils.AnimationController.queueIndex = Utils.AnimationController.queueIndex + Utils.AnimationController.queueIncrement;
       if(Utils.AnimationController.queueIndex === Utils.queue.length-1)
       {
-        if(Utils.queue[Utils.queue.length-1][1]===1 && !LinBst.Contained(Utils.queue[Utils.queue.length-1][0]))
+        if(Utils.queue[Utils.queue.length-1][1]=== 1 && !LinBst.contained(Utils.queue[Utils.queue.length-1][0]))
         {
           LinBst.Link.setValue(Utils.queue[Utils.queue.length-1][0],[]);
         }
-        else if(Utils.queue[Utils.queue.length-1][1]===2 && LinBst.Contained(Utils.queue[Utils.queue.length-1][0])){
+        else if(Utils.queue[Utils.queue.length-1][1] === 2){
           LinBst.Link.deleteKey(Utils.queue[Utils.queue.length-1][0],[]);
         }
       }
@@ -797,6 +817,204 @@ async function drawTree() {
     }
   };
   drawLinked();
+}
+
+
+function treeLevels(root,level,levels)
+{
+    if(!root)
+    {
+        return;
+    }
+    if(levels.length - 1 < level)
+    {
+      levels.push(1);
+    }
+    else
+    {
+      levels[level] = levels[level]+1;
+    }
+    treeLevels(root.left,level+1, levels);
+    treeLevels(root.right, level+1, levels);
+}
+
+function divideWidthEqualRatio(width,noofnode){
+    let eachNodeSpace = Math.floor(width/noofnode);
+    let startingpostion = Math.floor((eachNodeSpace - Utils.BinarySearchTree.radiusofCircle * 2 )/ 2);
+    return startingpostion;
+}
+
+function getValueAtIndex(level)
+{
+  for(let i = 0; i < Utils.BinarySearchTree.visitedNode[level].length;i++)
+  {
+    if(!Utils.BinarySearchTree.visitedNode[level][i])
+    {
+      
+      Utils.BinarySearchTree.visitedNode[level][i] = true;
+      return Utils.BinarySearchTree.positions[level][i];
+    }
+  }
+}
+
+function visitedNodeTofalse()
+{
+  for(let i=0;i<Utils.BinarySearchTree.visitedNode.length;i++)
+  {
+    for(let j =0; j < Utils.BinarySearchTree.visitedNode[i].length; j++)
+    {
+      Utils.BinarySearchTree.visitedNode[i][j] = false;
+    }
+  }
+} 
+
+function designFramework()
+{
+  let levels = new Array();  //look up table 
+  let canv = Utils.canvas.getRes();
+  let visitedNode = new Array();
+  treeLevels(LinBst.Bst.root, 0, levels);
+  if(levels.length <= 4)
+  {
+    Utils.BinarySearchTree.distanceofLevels = 100;
+  }else
+  {
+    Utils.BinarySearchTree.distanceofLevels = 50;
+  }
+  let positionsAtDifferentLevels = new Array();
+  for(let i=0; i< levels.length; i++)
+  {
+    positionsAtDifferentLevels.push([]);
+    visitedNode.push([]);
+  }
+  let firstindex, difference;
+  for(let i = levels.length-1; i>=0;i--)
+  {
+    difference = divideWidthEqualRatio(canv[0], levels[i]);
+    firstindex = difference;
+    for(let j = 1 ; j<= levels[i];j++)
+    {
+      positionsAtDifferentLevels[i].push([firstindex, canv[1] - (Utils.BinarySearchTree.distanceofLevels*i+Utils.BinarySearchTree.distanceofLevels)]);
+      firstindex = firstindex + 2 * Utils.BinarySearchTree.radiusofCircle + 2 * difference + 1 ;    
+      visitedNode[i].push(false);
+    }
+  }
+  Utils.BinarySearchTree.positions = positionsAtDifferentLevels;
+  Utils.BinarySearchTree.visitedNode = visitedNode;
+}
+
+// function position(x1, y1 ,x2, y2)
+// {
+//   var angleRad = Math.atan((y2-y1)/(x2-x1));
+//   var angleDeg = angleRad * 180 / Math.PI;
+
+
+//   let xAxis = Math.pow(x1-x2,2);
+//   let yAxis = Math.pow(y1-y2,2);
+
+//   return [Math.floor(Math.sqrt(xAxis + yAxis)) - Utils.BinarySearchTree.radiusofCircle,angleDeg];
+// }
+
+// function Cosine(angle, displacement)
+// {
+//   return Math.cos((angle* 180)/ Math.PI) * displacement;
+// }
+
+// function Sine(angle, displacement)
+// {
+//   return Math.sin((angle* 180)/ Math.PI) * displacement;
+// }
+
+function drawBST()
+{ 
+  Utils.AnimationController.queueIndex = 0;
+  const radCircle = Utils.BinarySearchTree.radiusofCircle;
+  let position;
+  designFramework();
+
+  function drawBinaryTree(){
+    Utils.AnimationController.now = Date.now();
+    Utils.AnimationController.elapsed_time = Utils.AnimationController.now - Utils.AnimationController.time;
+    if (!Utils.AnimationController.playing) {
+      Utils.AnimationController.cancelAnimation();
+      return;
+    }
+    if (Utils.AnimationController.elapsed_time >= Utils.AnimationController.frameRate) {
+      Utils.Webglv.clear();
+      Utils.ctx.clear();
+      function btView(node, level, xstep = 0, ystep = 0) {
+            if (node !== null) {
+              if(xstep === 0 && ystep === 0){
+                position = getValueAtIndex(level);
+                xstep = position[0];
+                ystep = position[1];
+              }
+              circle.setColor("red");
+              for(let i = 0; i<= Utils.AnimationController.queueIndex; i++)
+              {
+                if(node.value === Utils.queue[i][0])
+                {
+                  if(Utils.queue[i][1] === 1 || Utils.queue[i][1] === 4)
+                  {
+                    circle.setColor("green");
+                  }
+                  else if(Utils.queue[i][1] === 2)
+                  {
+                    //delete key
+                  }
+                  else if(Utils.queue[i][1] === 3)
+                  {
+                    circle.setColor("blue");
+                  }
+                }
+              }
+                circle.setGeometry(xstep, ystep, radCircle);
+                circle.draw();
+                Utils.ctx.setFontSize(15);
+                Utils.ctx.draw(node.value.toString(), [xstep-11,ystep-11]);
+            }
+            if (node.left !== null) {
+              position = getValueAtIndex(level+1);
+              line.setGeometryp(xstep, ystep - radCircle, position[0]+16,position[1]+16);
+              line.draw();
+              btView(node.left, level+1, position[0], position[1]);
+            }
+            if (node.right !== null) {
+              position = getValueAtIndex(level+1);
+              line.setGeometryp(xstep, ystep-radCircle, position[0]-16,position[1]+16);
+              line.draw();
+              btView(node.right,level+1, position[0], position[1]);
+            }
+      }
+      btView(LinBst.Bst.root,0);
+      visitedNodeTofalse();
+      // Remember when this scene was rendered.
+      Utils.AnimationController.time = Utils.AnimationController.now;
+      Utils.AnimationController.queueIndex = Utils.AnimationController.queueIndex + Utils.AnimationController.queueIncrement;
+    
+    if(Utils.AnimationController.queueIndex < Utils.queue.length){
+      if(Utils.queue[Utils.AnimationController.queueIndex][1]=== 1 && !LinBst.containedinBST(Utils.queue[Utils.AnimationController.queueIndex][0]))
+      {
+        LinBst.Bst.setValue(Utils.queue[Utils.AnimationController.queueIndex][0],[]);
+        designFramework();
+      }
+      else if(Utils.queue[Utils.AnimationController.queueIndex][1] === 2 && LinBst.containedinBST(Utils.queue[Utils.AnimationController.queueIndex][0])){
+        LinBst.Bst.deleteKey(Utils.queue[Utils.AnimationController.queueIndex][0]);
+        designFramework();
+      }
+    }
+
+    }
+    if (Utils.AnimationController.queueIndex <= Utils.queue.length - 1 && Utils.AnimationController.queueIndex >= 0) {
+      Utils.AnimationController.animationNo = window.requestAnimationFrame(drawBinaryTree);
+    }
+    else {
+      Utils.AnimationController.cancelAnimation();
+      Utils.AnimationController.playing = false;
+    }
+  } 
+  drawBinaryTree();
+  
 }
 
 function drawGrid() {
@@ -991,17 +1209,58 @@ function sort(sorttype) {
   } else if (sorttype === "pathfind") {
     Astarfunc();
   } else if (sorttype === "bst") {
-    Bst(arr[0], arr[1]);
-  } else {
-    if(LinBst.inputedValues.length!=0){
-      for(let i=0;i<LinBst.inputedValues.length-1;i++)
-      {
-        Linked(LinBst.inputedValues[i][0],LinBst.inputedValues[i][1]);
-      }
-      Linked(LinBst.inputedValues[LinBst.inputedValues.length-1][0],LinBst.inputedValues[LinBst.inputedValues.length-1][1],1);
-      LinBst.inputedValues=[];
+    let counter = 0;
+    let setofInputs = new Set();
+    try {
+      LinBst.inputedValues.forEach( element =>{
+        setofInputs.add(element);
+      });
+    } 
+    catch (error) 
+    {
+      console.log(error);
     }
-    console.log(Utils.queue);
+    setofInputs.forEach(element =>
+    {
+      if(counter === LinBst.inputedValues.length-1)
+      {
+        Bst(element[0],element[1], 1);
+      }
+      else
+      {
+        Bst(element[0],element[1], 0);
+      }
+        counter++;
+    });
+
+    LinBst.inputedValues=[];
+    drawBST();
+  } 
+  else {
+    let setofInputs = new Set();
+    let counter = 0;
+    try {
+      LinBst.inputedValues.forEach( element =>{
+        setofInputs.add(element);
+      });
+    } 
+    catch (error) 
+    {
+      console.log(error);
+    }
+
+    setofInputs.forEach(element =>
+      {
+        if(counter === LinBst.inputedValues.length-1)
+        {
+          Linked(element[0],element[1], 1);
+        }
+        else{
+          Linked(element[0],element[1], 0);
+        }
+        counter++;
+      });
+    LinBst.inputedValues=[];
     drawTree();
   }
   if (callSortfunc) {

@@ -1,4 +1,4 @@
-import {drawTree, Utils} from './canvas.js';
+import {Utils} from './canvas.js';
 
 class NodeList{
     constructor(_val = null)
@@ -7,27 +7,27 @@ class NodeList{
         this.value = _val;
     }
 }
+
+class NodeBst
+{
+    constructor(_val = null)
+    {
+        this.left = null;
+        this.right = null;
+        this.value = _val;
+    }
+}
+
 class LinkedList{
-    constructor(key = null ){
-        if(key){
-            this.root = new NodeList(key);
-            this.size = 1;
-        }
-        else{
-            this.size = 0;
-            this.root = null;
-        }
+    constructor( )
+    {
+        this.size = 0;
+        this.root = null;
     }
 
     isEmpty()
     {
-        if(this.size === 0 || this.root === null)
-        {
-            return true;
-        }
-        else{
-            return false;
-        }
+        return this.root === null;
     }
 
     setRoot(key, queue = null)
@@ -60,7 +60,7 @@ class LinkedList{
     {
         if(self.value > key)
         {
-            queue.push([key, 1]);
+            queue.push([key,1]);
             let node = new NodeList(self.value);
             self.value = key;
             node.next = self.next;
@@ -74,8 +74,10 @@ class LinkedList{
         }
         else
         {
+            queue.push([self.value, 3]);
             self.next = new NodeList(key);
             queue.push([key, 1]);
+
         }
 
         return self;
@@ -112,10 +114,10 @@ class LinkedList{
         {
             if(node.value == key)
             {
-                queue.push([self.value, 4]);
+                queue.push([node.value, 4]);
                 break;
             }
-            queue.push([self.value, 3]);
+            queue.push([node.value, 3]);
             node = node.next;
         }
     }
@@ -130,99 +132,284 @@ class LinkedList{
 
 class BST{
 
-    constructor(key = null){
-        this.left = null;
-        this.right = null;
-        this.value = key;
-        this.recentInsert = false;
+    constructor(){
+       this.root = null;
+       this.size = 0;
     }
 
-    setValue(key, self = null){
-        if(this.value === null){
-            this.value = key;
-            this.recentInsert = true;
-            return;
-        }
 
-        else if( self === null ){
-            self = this;
-        }
-
-        if(key >= self.value){
-            if( self.right != null ){
-                this.setValue(key, self.right);
-            }else{
-                self.right = new BST(key);
-                if(self.recentInsert){
-                    self.recentInsert = false;
-                }
-                self.right.recentInsert = true; 
-            }
-        }
-        if(key < self.value){
-            if( self.left != null ){
-                this.setValue(key, self.left);
-            }else{
-                self.left = new BST(key);
-                if(self.recentInsert){
-                    self.recentInsert = false;
-                }
-                self.left.recentInsert = true; 
-            }
-        } 
+    isEmpty()
+    {
+        return this.root === null;
     }
+
+    search(number, queue)
+    {
+        let node = this.root;
+        while(node!=null)
+        {
+            if(node.value === number)
+            {
+                queue.push([node.value, 4]);
+                break;
+            }
+            else if(node.value < number)
+            {
+                queue.push([node.value, 3]);
+                node = node.right;
+            }
+            else{
+                queue.push([node.value, 3]);
+                node = node.left;
+            }
+        }
+    }
+    
+    setValue(key, queue){               
+        if(this.isEmpty())
+        {
+            queue.push([key,1]);
+            let newNode = new NodeBst(key);
+            this.root = newNode;
+            this.size++;
+        }
+        else
+        {
+            this.insertNode(this.root, key, queue);
+        }
+    }
+
+    insertNode(node, key, queue)
+    {
+        if(key < node.value)
+        {
+            if(node.left === null)
+            {
+                queue.push([node.value, 3]);
+                queue.push([key,1]);
+                node.left = new NodeBst(key);
+                this.size++;
+            }
+            else
+            {
+                queue.push([node.value, 3]);
+                this.insertNode(node.left, key, queue);
+            }
+        }
+        else
+        {
+            if(node.right === null)
+            {   
+                queue.push([node.value, 3]);
+                queue.push([key, 1]);
+                node.right = new NodeBst(key);
+                this.size++;
+            }
+            else
+            {
+                queue.push([node.value, 3]);
+                this.insertNode(node.right, key, queue);
+            }
+        }
+    }
+
+    display(key, queue)
+    {
+        if(!this.isEmpty())
+        {
+            if(key === 5)
+            {
+                this.inOrder(queue,this.root);
+            }
+            else if(key === 6)
+            {
+                this.preOrder(queue, this.root);
+            }
+            else
+            {
+                this.postOrder(queue, this.root);
+            }
+        }
+    }
+
+    inOrder(queue, node = null)
+    {
+        if(node !== null)
+        {
+            this.inOrder(queue, node.left);
+            queue.push([node.value,3]);
+            this.inOrder(queue,node.right);
+        }
+    }
+
+    preOrder(queue, node = null)
+    {
+        if(node !== null)
+        {
+            queue.push([node.value,3]);
+            this.preOrder(queue, node.left);
+            this.preOrder(queue, node.right);
+        }
+    }
+
+    postOrder(queue, node = null)
+    {
+        if(node !== null)
+        {
+            this.postOrder(queue, node.left);
+            this.postOrder(queue, node.right);
+            queue.push([node.value,3]);
+        }
+    }
+
+    deleteKey(data, queue = null)
+    {
+        if(!this.isEmpty()){
+            this.root = this.removeNode(this.root, data, queue);
+        }
+    }
+
+    findMinNode(node)
+    {
+        if(node.left === null)
+        {
+            return node;
+        }
+        else
+        {
+            return this.findMinNode(node.left);
+        }
+    }
+
+    removeNode(node, key, queue = null)
+    {
+    
+        if(node === null)
+        {
+            return null;
+        }
+        else if(key < node.value)
+        {   
+            if(queue != null){
+                queue.push([node.value, 3]);
+            }
+            node.left = this.removeNode(node.left, key, queue);
+            return node;
+        }
+        else if(key > node.value)
+        {
+            if(queue != null){
+                queue.push([node.value, 3]);
+            }
+            node.right = this.removeNode(node.right, key, queue);
+            return node;
+        }
+        else
+        {
+            if(node.left === null && node.right === null)
+            {
+                if(queue != null){
+                    queue.push([node.value, 2]);
+                }
+                else{
+                    node = null;
+                }
+                return node;
+            }
+            if(node.left === null)
+            {
+                if(queue != null){
+                    queue.push([node.value, 2]);
+                }
+                else{
+                    node = node.right;
+                }
+                return node;
+            }
+            
+            else if(node.right === null)
+            {
+                if(queue != null){
+                    queue.push([node.value, 2]);
+                }else
+                {
+                    node = node.right;
+                }
+                return node;
+            }
+            if(node.value === key ){
+                if(queue != null){                
+                    queue.push([node.value, 4]);
+                }
+            }
+            else
+            {
+                if(queue != null){
+                    queue.push([node.value, 3]);
+                }
+            }
+            var aux = this.findMinNode(node.right);
+            node.value = aux.value;
+            node.right = this.removeNode(node.right, aux.value, queue);
+            return node;
+        }
+    
+    }
+
 }
 
 //class that Handles Data Structures data for whole runtime
 const LinBst={
     Link : new LinkedList(),
     Bst : new BST(),
-    inputedValues : [[15,1],[123,1],[12,1],[20,1],[642,1],[123,2],[299,1]],
-    Contained: function(number){
-                    let node = LinBst.Link.root;
-                    while(node!=null)
-                    {
-                        if(node.value === number)
-                        {
-                            return true;
-                        }
-                        node = node.next;
-                    }
+    inputedValues :[],
+    contained: function(number)
+    {
+        let node = LinBst.Link.root;
+        while(node != null)
+        {
+            if(node.value === number)
+            {
+                return true;
             }
+            node = node.next;
+        }
+        return false;
+    },
+    containedinBST: function(number)
+    {
+        let node = LinBst.Bst.root;
+        while(node != null)
+        {
+            if(node.value === number)
+            {
+                return true;
+            }
+            if(number>node.value)
+            {
+                node = node.right;
+            }
+            else
+            {
+                node = node.left;
+            }
+        }
+        return false;
+    }
 }
 
-
-
-
-function Linked(number, mode, delet = 0){
+function Linked(number, mode, offset){
     let queue=[];
-    if(LinBst.Contained(number))
-    {
-        if(mode === 1)
-        {
-            alert("Number dublication Restricted");
-            return;
-        }
-    }
-    else{
-        if(mode === 2)
-        {
-            alert("Number not found");
-        }
-    }
-
     if (mode == 1){
         LinBst.Link.setValue(number,  queue);
-        if(LinBst.Link.size >= 1 && delet != 0){
+        if(offset === 1)
+        {
             LinBst.Link.deleteKey(number, []);
         }
     }
     else if(mode == 2 && LinBst.Link.size != 0){
         LinBst.Link.deleteKey(number, queue);
-        if(delet != 0)
-        {
-            LinBst.Link.setValue(number, []);
-        }
+        LinBst.Link.setValue(number, []);
     }
     else{
         LinBst.Link.search(number, queue);
@@ -230,18 +417,31 @@ function Linked(number, mode, delet = 0){
     Utils.queue = queue;
 }
 
-function Bst(mode, number){
-    LinBst.Bst.clearRecentPriority();
+function Bst(number, mode,offset){
+    let queue = [];
     if (mode === 1){
-        LinBst.Bst.setValue(number);
+        if(offset === 1)
+        {
+            LinBst.Bst.setValue(number, queue);
+            LinBst.Bst.deleteKey(number);
+        }
+        else
+        {
+            LinBst.Bst.setValue(number, []);
+        }
     }
-    else if (mode == 2){
-        LinBst.Bst.deleteKey(number);
+    else if (mode === 2){
+        LinBst.Bst.deleteKey(number, queue);
+        console.log(queue);
+    }
+    else if(mode === 3)
+    {
+        LinBst.Bst.search(number,queue);
     }
     else{
-        LinBst.Bst.clearList();
+        LinBst.Bst.display(mode, queue);
     }
-    drawTree(LinBst.Bst, 2); 
+    Utils.queue = queue;
 }
 
 export {Linked, Bst, LinBst};

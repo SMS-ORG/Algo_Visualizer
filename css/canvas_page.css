@@ -284,6 +284,27 @@ input[type="range"][orient="vertical"] {
   z-index: 4;
 }
 
+.tree-container
+{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#tree_options{
+  background: hsl(219, 100%, 68%);
+  height: 2rem;
+  border-radius: 4px;
+  border: none;
+  color: whitesmoke;
+}
+
+.tree-container > input
+{
+  width: 70%;
+  padding-left: 4px;
+}
+
 @media screen and (max-width:900px) {
   nav{
     height:60px;
