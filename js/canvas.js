@@ -707,12 +707,13 @@ function drawTree() {
   let resCanvas = Utils.canvas.getRes();
   let x,y;
   let Dir; // to fo right
-  
+  Utils.ctx.setFontSize();
+
   if(Utils.queue.length === 1 && Utils.queue[0][1] === 2)
   {
     LinBst.Link.deleteKey(Utils.queue[0][0], []);
   }
-
+  Utils.ctx.setFontSize();
   let drawLinked = function () {
     x = radCircle + 10;
     y = resCanvas[1] - radCircle - 10   - 90;
@@ -903,28 +904,6 @@ function designFramework()
   Utils.BinarySearchTree.visitedNode = visitedNode;
 }
 
-// function position(x1, y1 ,x2, y2)
-// {
-//   var angleRad = Math.atan((y2-y1)/(x2-x1));
-//   var angleDeg = angleRad * 180 / Math.PI;
-
-
-//   let xAxis = Math.pow(x1-x2,2);
-//   let yAxis = Math.pow(y1-y2,2);
-
-//   return [Math.floor(Math.sqrt(xAxis + yAxis)) - Utils.BinarySearchTree.radiusofCircle,angleDeg];
-// }
-
-// function Cosine(angle, displacement)
-// {
-//   return Math.cos((angle* 180)/ Math.PI) * displacement;
-// }
-
-// function Sine(angle, displacement)
-// {
-//   return Math.sin((angle* 180)/ Math.PI) * displacement;
-// }
-
 function drawBST()
 { 
   Utils.AnimationController.queueIndex = 0;
@@ -1036,7 +1015,7 @@ function drawGrid() {
   }
 }
 
-const clearResourcesSort = function (functions) {
+const clearResourcesSort = function() {
   Utils.Sorting.arr = [];
   document.getElementById("myRange").disabled = true;
 };
@@ -1050,12 +1029,45 @@ const clearResourcesPathFind = function (functions) {
   Astar.grid = [];
 };
 
+const clearResourcesTree = function()
+{
+  document.getElementById("tree-data").style.display = "none";
+  document.getElementById("tree-container").style.display = "none";
+  document.getElementById("canvas").style.zIndex = 0;
+}
+
+function getTreeData()
+{
+  let id = document.getElementById("tree_options").value;
+  let text = document.getElementById("inputsvalue").value;
+  let arr = text.split(',');
+  let value;
+  arr.forEach(element=>
+  {
+    value = parseInt(element);
+    if(!isNaN(value)){
+      LinBst.inputedValues.push([value,parseInt(id)]);
+    }
+  });
+  value = parseInt(id);
+  if(value === 5 || value === 6 || value === 7)
+  {
+    LinBst.inputedValues.push([0,value]);
+  }
+  // console.log(LinBst.inputedValues);
+  document.getElementById("inputsvalue").value = " ";
+}
+
 function makeReady(flag, functions) {
-  if (flag === 1) {
-    // let canv = document.getElementById("CANVAS");
+  if (flag === 1) 
+  {
     document.getElementById("myRange").disabled = false;
     clearResourcesPathFind(functions);
-  } else if (flag === 2) {
+    clearResourcesTree();
+    Utils.ctx.setFontSize();
+  } 
+  else if (flag === 2) 
+  {
     Utils.ctx.clear();
     let canv = document.getElementById("CANVAS");
     canv.addEventListener("mousedown", functions[0]);
@@ -1065,13 +1077,23 @@ function makeReady(flag, functions) {
     drawGrid();
     makeGrid();
     document.getElementById("radio_container").style.display = "flex";
-  } else if (flag === 3) {
+    clearResourcesTree();
+  } 
+  else if (flag === 3) 
+  {
     Utils.ctx.clear();
     Utils.Webglv.clear();
     document.getElementById("canvas").style.zIndex = 3;
-    clearResourcesSort(functions);
+    document.getElementById("tree-data").style.display = "block";
+    document.getElementById("tree-container").style.display = "flex";
+    clearResourcesSort();
     clearResourcesPathFind(functions);
-  } else {
+
+
+    document.getElementById("submitData").addEventListener("click",getTreeData);
+  } 
+  else 
+  {
     Utils.ctx.clear();
     Utils.Webglv.clear();
   }
@@ -1086,7 +1108,6 @@ function isIncludeInLibrary(arr, point) {
   }
   return -1;
 }
-
 
 function drawInputpos() {
   for (let i = 0; i < Astar.inputedPos.length; i++) {

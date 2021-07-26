@@ -61,6 +61,7 @@
             <canvas id="canvas" width="800px" height="500px"></canvas>
             <canvas id="CANVAS" width="800px" height="500px"></canvas>
           </section>
+          <p style="padding-left:37%; font-weight:bold">Canvas Size: 800 * 500</p>
         </div>
         <div class="boxy tools-tab">
           <div class="settings_panel" id="main_panel">
@@ -119,8 +120,8 @@
               <label for="myRange" style="margin-left:100px;margin-right: 10rem;">Form Array</label>
               <label for="frameSlider">Frame</label>
             </div>
-            <div class="tree-container">
-                <input type="text">
+            <div id="tree-container">
+                <input id="inputsvalue" type="text" name="tree-data">
                 <select name="tree_options" id="tree_options">
                   <option value="1" selected>Insert</option>
                   <option value="2">Delete</option>
@@ -129,7 +130,9 @@
                   <option value="6">Pre-Order</option>
                   <option value="7">Post-Order</option>
                 </select>
+                <input type="submit", id="submitData"/>
             </div>
+            <label id="tree-data" style="padding-left: 24%;" for="tree-data">Insert Number</label>
 
           </div>
         </div>

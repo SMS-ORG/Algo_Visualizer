@@ -170,9 +170,7 @@ function Sortingmethod() {
     document.getElementById("insert").addEventListener("click", checkRadio);
     document.getElementById("deleteNode").addEventListener("click", checkRadio);
     document.getElementById("insertEnd").addEventListener("click", checkRadio);
-    document
-      .getElementById("insertStart")
-      .addEventListener("click", checkRadio);
+    document.getElementById("insertStart").addEventListener("click", checkRadio);
 
 
     //Main PlayPause Slider
@@ -217,12 +215,6 @@ function Sortingmethod() {
       }
     );
 
-
-    document.getElementById("about").onclick = () => {
-      makeReady(4, [mousedown, mouseup]);
-    };
-
-
     //Radio Buttons for posistioning start, end ... for A* algorithm visualizer
     var radioBut = document.querySelectorAll(
       'input[type=radio][name="Insert"]'
@@ -231,7 +223,7 @@ function Sortingmethod() {
       element.addEventListener("change", checkRadio);
     });
     
-    document.getElementById("radio_container").style.display = 'none';
+    // document.getElementById("radio_container").style.display = 'none';
 
 
     //frame slidder for forming new array sorting
@@ -240,6 +232,8 @@ function Sortingmethod() {
       Utils.AnimationController.frameRate = frameSlider.value;
       Utils.AnimationController.recentFrameRate = frameSlider.value;
     };
+
+    makeReady(1, [mousedown,mouseup]);
 
     slider.oninput = function () {
       Utils.Sorting.newarray(slider.value);

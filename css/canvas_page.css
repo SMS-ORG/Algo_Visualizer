@@ -284,7 +284,7 @@ input[type="range"][orient="vertical"] {
   z-index: 4;
 }
 
-.tree-container
+#tree-container
 {
   display: flex;
   justify-content: space-between;
@@ -299,8 +299,10 @@ input[type="range"][orient="vertical"] {
   color: whitesmoke;
 }
 
-.tree-container > input
+#tree-container > input:first-child
 {
+  border-radius: 15px;
+  background-color: #c7c8c9;
   width: 70%;
   padding-left: 4px;
 }

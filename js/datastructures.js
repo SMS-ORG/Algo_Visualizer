@@ -434,7 +434,7 @@ function Bst(number, mode,offset){
         LinBst.Bst.deleteKey(number, queue);
         console.log(queue);
     }
-    else if(mode === 3)
+    else if(mode === 4)
     {
         LinBst.Bst.search(number,queue);
     }
