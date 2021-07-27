@@ -1,0 +1,26 @@
+{
+  "name": "algo_visualizer",
+  "version": "1.0.0",
+  "description": "1. Run shellscript on terminal ie, ./shellscript 2. Open any browser to view.  localhost:8000",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "http-server --cors -p 8000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nirmaldahal25/Algo_Visualizer.git"
+  },
+  "keywords": [
+    "\"Visualiztion\""
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nirmaldahal25/Algo_Visualizer/issues"
+  },
+  "homepage": "https://github.com/Nirmaldahal25/Algo_Visualizer#readme",
+  "dependencies": {
+    "http-server": "^0.12.3"
+  }
+}

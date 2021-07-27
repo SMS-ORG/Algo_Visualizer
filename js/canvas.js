@@ -556,7 +556,7 @@ const Utils = {
   BinarySearchTree:{
     positions: new Array(),
     radiusofCircle: 20,
-    distanceofLevels: 50,
+    distanceofLevels: 100,
     visitedNode: new Array(),
     oldBst : null,
   },
@@ -825,24 +825,40 @@ function treeLevels(root,level,levels)
 {
     if(!root)
     {
-        return;
+      return;
     }
     if(levels.length - 1 < level)
     {
-      levels.push(1);
+      levels.push([]);
     }
-    else
-    {
-      levels[level] = levels[level]+1;
-    }
+    levels[level].push(root.value);
     treeLevels(root.left,level+1, levels);
     treeLevels(root.right, level+1, levels);
 }
 
-function divideWidthEqualRatio(width,noofnode){
-    let eachNodeSpace = Math.floor(width/noofnode);
-    let startingpostion = Math.floor((eachNodeSpace - Utils.BinarySearchTree.radiusofCircle * 2 )/ 2);
-    return startingpostion;
+function divideWidthEqualRatio(maxLevel, width, arr){
+  let difference = (Math.floor(width/Math.pow(2, maxLevel))-2*Utils.BinarySearchTree.radiusofCircle)/2;
+  let startPoint = difference + Utils.BinarySearchTree.radiusofCircle;
+  let leftindex, rightindex;
+  let level = maxLevel;
+  
+  while(level >= 0){
+    for(let i = 0; i< Math.pow(2, level);i++)
+    {
+      if(level === maxLevel)
+      {
+        arr[level].push([startPoint]);
+        startPoint = startPoint+2*Utils.BinarySearchTree.radiusofCircle+2*difference;
+      }
+      else
+      {
+        leftindex = 2*i;
+        rightindex = 2* i+1;
+        arr[level].push([(arr[level+1][leftindex][0]+arr[level+1][rightindex][0])/2])
+      }
+    }
+    level--;
+  }
 }
 
 function getValueAtIndex(level)
@@ -869,37 +885,65 @@ function visitedNodeTofalse()
   }
 } 
 
+function obtainXPosition(node, value, level, arrofPos)
+{
+  let index1 = Math.floor(Math.pow(2,level)/2);
+  let index = index1;
+  while(node.value != value)
+  {
+    if(node.value > value)
+    {
+      node = node.left;
+      index1 = Math.ceil(index1 / 2);
+      index = index - index1;
+    }
+    else
+    {
+      node = node.right;
+      index1 = Math.floor(index1 / 2);
+      index = index + index1;
+    }
+  }
+  // console.log(arrofPos, level, index, value);
+  return arrofPos[level][index][0];
+}
+
 function designFramework()
 {
   let levels = new Array();  //look up table 
   let canv = Utils.canvas.getRes();
   let visitedNode = new Array();
+  let arrayOfPositions = new Array();
   treeLevels(LinBst.Bst.root, 0, levels);
-  if(levels.length <= 4)
+  let positionsAtDifferentLevels = new Array();
+  if(levels.length-1 < 4)
   {
     Utils.BinarySearchTree.distanceofLevels = 100;
-  }else
+  }
+  else
   {
     Utils.BinarySearchTree.distanceofLevels = 50;
   }
-  let positionsAtDifferentLevels = new Array();
+  let xPos;
+  let yPos = Utils.BinarySearchTree.distanceofLevels;
   for(let i=0; i< levels.length; i++)
   {
     positionsAtDifferentLevels.push([]);
     visitedNode.push([]);
+    arrayOfPositions.push([]);
   }
-  let firstindex, difference;
-  for(let i = levels.length-1; i>=0;i--)
+  divideWidthEqualRatio(levels.length-1,canv[0], arrayOfPositions);
+  for(let i = 0; i<levels.length; i++)
   {
-    difference = divideWidthEqualRatio(canv[0], levels[i]);
-    firstindex = difference;
-    for(let j = 1 ; j<= levels[i];j++)
+    for(let j = 0; j < levels[i].length; j++)
     {
-      positionsAtDifferentLevels[i].push([firstindex, canv[1] - (Utils.BinarySearchTree.distanceofLevels*i+Utils.BinarySearchTree.distanceofLevels)]);
-      firstindex = firstindex + 2 * Utils.BinarySearchTree.radiusofCircle + 2 * difference + 1 ;    
+      xPos = obtainXPosition(LinBst.Bst.root, levels[i][j], i, arrayOfPositions);
+      yPos =canv[1] - (Utils.BinarySearchTree.distanceofLevels + i * Utils.BinarySearchTree.distanceofLevels);
+      positionsAtDifferentLevels[i].push([xPos, yPos]);
       visitedNode[i].push(false);
     }
   }
+  console.log(positionsAtDifferentLevels);
   Utils.BinarySearchTree.positions = positionsAtDifferentLevels;
   Utils.BinarySearchTree.visitedNode = visitedNode;
 }
@@ -1078,6 +1122,7 @@ function makeReady(flag, functions) {
     makeGrid();
     document.getElementById("radio_container").style.display = "flex";
     clearResourcesTree();
+    Utils.ctx.setFontSize();
   } 
   else if (flag === 3) 
   {
