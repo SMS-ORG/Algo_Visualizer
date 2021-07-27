@@ -313,6 +313,7 @@ class BST{
                 }
                 else{
                     node = null;
+                    this.size--;
                 }
                 return node;
             }
@@ -323,6 +324,7 @@ class BST{
                 }
                 else{
                     node = node.right;
+                    this.size--;
                 }
                 return node;
             }
@@ -334,6 +336,7 @@ class BST{
                 }else
                 {
                     node = node.right;
+                    this.size--;
                 }
                 return node;
             }

@@ -708,7 +708,17 @@ function drawTree() {
   let x,y;
   let Dir; // to fo right
   Utils.ctx.setFontSize();
-
+  if(LinBst.Link.size === 0 && Utils.queue.length === 1)
+  {
+    if(Utils.queue[0][1] === 1)
+    {
+      LinBst.Link.setValue(Utils.queue[0][0],[]);
+    }
+    else
+    {
+      return;
+    }
+  }
   if(Utils.queue.length === 1 && Utils.queue[0][1] === 2)
   {
     LinBst.Link.deleteKey(Utils.queue[0][0], []);
@@ -943,7 +953,7 @@ function designFramework()
       visitedNode[i].push(false);
     }
   }
-  console.log(positionsAtDifferentLevels);
+  // console.log(positionsAtDifferentLevels);
   Utils.BinarySearchTree.positions = positionsAtDifferentLevels;
   Utils.BinarySearchTree.visitedNode = visitedNode;
 }
@@ -953,6 +963,17 @@ function drawBST()
   Utils.AnimationController.queueIndex = 0;
   const radCircle = Utils.BinarySearchTree.radiusofCircle;
   let position;
+  if(LinBst.Bst.size === 0 && Utils.queue.length === 1)
+  {
+    if(Utils.queue[0][1] === 1)
+    {
+      LinBst.Bst.setValue(Utils.queue[0][0],[]);
+    }
+    else
+    {
+      return;
+    }
+  }
   designFramework();
 
   function drawBinaryTree(){
