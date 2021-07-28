@@ -215,7 +215,7 @@ function Sortingmethod() {
       Utils.AnimationController.recentFrameRate = frameSlider.value;
     };
 
-    makeReady(1, [mousedown,mouseup]);
+    BubbleSort();
 
     slider.oninput = function () {
       Utils.Sorting.newarray(slider.value);
