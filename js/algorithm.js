@@ -79,12 +79,12 @@ const BubbleSort = () => {
 
 const HeapSort = () => {
   makeReady(1, [mousedown, mouseup]);
-  changeActive("heapsort",1);
+  changeActive("heapsort",2);
 }; //function for Heapsort
 
 const QuickSort = () => {
   makeReady(1, [mousedown, mouseup]);
-  changeActive("quicksort",2);
+  changeActive("quicksort",1);
   //function for quicksort
 };
 const MergeSort = () => {
@@ -94,17 +94,17 @@ const MergeSort = () => {
 
 const PathFind = () => {
   makeReady(2, [mousedown, mouseup]);
-  changeActive("pathfind",4);
+  changeActive("pathfind",5);
 }; //function for Path Finding Algorithm
 
 const Linkedlist = () => {
   makeReady(3, [mousedown, mouseup]);
-  changeActive("linkedlist",5);
+  changeActive("linkedlist", 6);
 }; //function for Linked List
 
 const Bst = () => {
   makeReady(3, [mousedown, mouseup]);
-  changeActive("bst",6); 
+  changeActive("bst",4); 
   //function for Bst
 };
 

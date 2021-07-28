@@ -294,7 +294,7 @@ class Line {
     var y1 = y;
     var y2 = Math.sin((angle * Math.PI) / 180) * distance;
     this.position = [x1, y1, x-x2, y-y2];
-    console.log(this.position);
+    // console.log(this.position);
   }
 
   setGeometryp(x, y, x1, y1) {
@@ -708,20 +708,16 @@ function drawTree() {
   let x,y;
   let Dir; // to fo right
   Utils.ctx.setFontSize();
-  if(LinBst.Link.size === 0 && Utils.queue.length === 1)
+  if(Utils.queue.length === 1)
   {
-    if(Utils.queue[0][1] === 1)
+    if(Utils.queue[0][1] === 1 && !LinBst.contained(Utils.queue[0][0]))
     {
       LinBst.Link.setValue(Utils.queue[0][0],[]);
     }
-    else
+    else if(Utils.queue[0][1] === 2)
     {
-      return;
+      LinBst.Link.deleteKey(Utils.queue[0][0],[]);
     }
-  }
-  if(Utils.queue.length === 1 && Utils.queue[0][1] === 2)
-  {
-    LinBst.Link.deleteKey(Utils.queue[0][0], []);
   }
   Utils.ctx.setFontSize();
   let drawLinked = function () {
@@ -974,6 +970,15 @@ function drawBST()
       return;
     }
   }
+  else if(Utils.queue != null && Utils.queue[0][1] === 2 && LinBst.containedinBST(Utils.queue[0][0]))
+  {
+    LinBst.Bst.deleteKey(Utils.queue[0][0]);
+    if(LinBst.Bst.size === 0)
+    {
+      Utils.Webglv.clear();
+      Utils.ctx.clear();
+    }
+  }
   designFramework();
 
   function drawBinaryTree(){
@@ -1030,7 +1035,9 @@ function drawBST()
               btView(node.right,level+1, position[0], position[1]);
             }
       }
-      btView(LinBst.Bst.root,0);
+      if(LinBst.Bst.root != null){
+        btView(LinBst.Bst.root,0);
+      }
       visitedNodeTofalse();
       // Remember when this scene was rendered.
       Utils.AnimationController.time = Utils.AnimationController.now;
@@ -1319,7 +1326,6 @@ function sort(sorttype) {
       }
         counter++;
     });
-
     LinBst.inputedValues=[];
     drawBST();
   } 

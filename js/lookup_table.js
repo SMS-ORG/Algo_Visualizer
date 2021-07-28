@@ -1,6 +1,4 @@
-const HTML[
-"<h1>Algo Visualizer</h1>" +
-    "<hr>" +
+const HTML = [
     "<p><strong>Bubble Sort:</strong><br>Bubble sort is often referred to as sinking sort.<br>" +
         "It is the simplest sorting algorithm that works by repeatedly swapping adjacent elements if they are<br>" +
         "in the wrong order.The pass through the list is repeated until the list is sorted.Bubble sort <br>" +
@@ -10,13 +8,9 @@ const HTML[
 
         
         "<ul><strong> Time Complexity:</strong><br><br>" +
-        "<li>Worst Case: O(n^2)</li>" +
         "<li>General Case: O(n^2)</li>" +
-        
-        "<li>Best Case: O(n^2)</li><br>" +
-        
-        "<strong> Space Complexity: </strong>O(n)<br> </ul>" +
-    "</p>" ,
+    "</p>" 
+    ,
     "<p><strong>Quick Sort:</strong><br>It is a divide-and-conquer algorithm.<br>" +
         "It works by selecting a 'pivot' element from the array and partitioning the other elements<br>" +
         "into two sub-arrays, according to whether they are less than or greater than the pivot.<br> " +
@@ -30,35 +24,23 @@ const HTML[
         "<li>Worst Case: T(n-1) + (n)</li>" +
         "<li>General Case: T(k) + T(n-k-1) + (n)</li>" +
         
-        "<li>Best Case: O(n log n)</li><br> " +
-        
-        "<strong> Space Complexity: </strong>O (log n)<br> </ul> " +
-    "</p>" ,
+        "<li>Best Case: O(n log n)</li><br> "+
+    "</p>" 
+    ,
     "<p><strong>Heap Sort:</strong><br>A heap is a tree-based data structure that allows access to the <br>" +
-        "minimum and maximum element in the tree in constant time.The constant time taken is Big O(1). <br>" +
-        "This is regardless of the data stored in the heap.There are two types of heaps:<br>" +
+        "minimum and maximum element in the tree in constant time O(1). This is regardless of the data <br>" +
+        "stored in the heap.There are two types of heaps:<br>" +
         "Min Heap and Max Heap.<br>" +
         "<ul>" +
         "<li><strong>Min Heap:</strong> In a min-heap, the parent or root node is usually lesser in value than the children nodes. <br></li>" +
         "<li><strong>Max Heap:</strong> In a max-heap, the parent or root node is usually greater than the children’s nodes.<br></li>" +
         "</ul>" +
-        "Heap sort is a comparison-based sorting technique based on Binary Heap data structure. It is <br>" +
-        "similar to selection sort where we first find the minimum element and place the minimum element<br>" +
-        "at the beginning. We repeat the same process for the remaining elements.<br>" +
-        
-        "<ul><strong> Time Complexity:</strong> O(1)<br></ul>" +
+        "<p>Heap sort is a sorting algorithm based on Binary Heap data structure. It is similar to  <br>" +
+        "selection sort where we first find the minimum element and place the minimum element<br>" +
+        "at the beginning. We repeat the same process for the remaining elements. Here, the program uses<br>" +
+        "max heap.</p><br>"+
+        "<ul><strong> Time Complexity:</strong> O(n log n)<br></ul>" +
 
-    "</p>" ,
-    "<p><strong>Merge Sort:</strong><br>Merge sort is a divide and conquer algorithm. It divides the input <br>" +
-        "array into two halves, calls itself for the two halves, and then merges the two sorted halves. <br>" +
-        "The merge () function is used for merging two halves.<br>" +
-
-        
-        "<ul><strong> Time Complexity:</strong>O(n log n)<br>" +
-        
-        "<strong> Space Complexity: </strong>O (n)<br> </ul>" +
-    "</p>" ,
-    "<p><strong>Binary Search Tree:</strong><br>" +
         "<ul><li>Complete Binary tree: A Binary Tree is a Complete Binary Tree if all the levels are <br>" +
         "completely filled except possibly the last level and the last level has all keys as left<br>" +
         "as possible.</li>" +
@@ -68,9 +50,24 @@ const HTML[
         "last level is not filled fully always.</li>" +
 
         "<li>Array representation of binary tree: In array representation of a binary tree, we use <br>" +
-        "one-dimensional array (1-D Array) to represent a binary tree.</li></ul>" +
-
-    "</p>" ,
+        "one-dimensional array (1-D Array) to represent a binary tree. A Binary tree of height (n), each<br>"+
+        "having at most two childs can be represented by array of size 2<sup>(n+1)</sup> - 1.<br>" +
+        "Eachnode at index has it's leftchild and rightchild at-><br>"+
+        "<ul><li>leftchild:  2 * index</li>"+
+        "<li>rightchild:  2 * index + 1</li></ul>"+
+        "</li></ul>"+
+    "</p>" 
+    ,
+    "<p><strong>Merge Sort:</strong><br>Merge sort is a divide and conquer algorithm. It divides the input <br>" +
+        "array into two halves, calls itself for the two halves, and then merges the two sorted halves. <br>" +
+        
+        "<ul><strong> Time Complexity:</strong>O(n log n)<br>" +
+        
+    "</p>" 
+    ,
+    "<p><strong>Binary Search Tree:</strong><br>" +
+    "</p>"
+    ,
     "<p><strong>A* (A-star) algorithm:</strong><br>" +
         "It is a graph traversal and path search algorithm which is often <br>" +
         "used in many fields of computer science due to its completeness, optimality and optimal <br>" +
@@ -94,27 +91,22 @@ const HTML[
         "It is the distance between two points measured along axes at right angles.<br>" +
         "&nbsp;&nbsp;&nbsp;&nbsp;<strong> Manhattan Distance </strong>= (x_index+ y_index)<br>" +
     "</p>" +
-    "<p><strong>Breadth First Search(BFS):</strong><br>" +
-        "Breadth-first search is an algorithm for searching a tree data structure for a node that <br>" +
+    "<p><strong>Best First Search(BFS):</strong><br>" +
+        "Best-first search is an algorithm for searching a tree data structure for a node that <br>" +
         "satisfies a given property. It starts at the tree root and explores all nodes at the present<br>" +
-        "depth prior to moving on to the nodes at the next depth level.<br>" +
-
-        
-        "<ul><strong> Time Complexity:</strong>: O(|E|) = O(b^d)<br>" +
-        
-        "<strong> Space Complexity: </strong>O(|V|) = O(b^d)<br> </ul>" +
+        "depth prior to moving on to the nodes at the next depth level. The difference between breadth<br>" +
+        "first search and depth first search is that they are uninformed serach. The best first search uses<br>"+
+        "a heuristic function that evaluates the cost of the following the adjacent nodes."+
+        "<ul><strong> Time Complexity:</strong>:<br>" +
+        "<li> Worst Case: O(n logn) </li>"+
     "</p>" +
     "<p><strong>Euclidean Distance:</strong><br>" +
         "Euclidean distance between two points in euclidean space is the length of line segment<br>" +
         "between two points. It can be calculated from the Cartesian coordinates of the points <br>" +
         "using the Pythagorean theorem, therefore occasionally being called the Pythagorean distance.<br>" +
 	    "&nbsp;&nbsp;&nbsp;&nbsp;<strong>Euclidean Distance:</strong> (x^2 + y^2)<br>" +
-
-        
-        "<ul><strong> Time Complexity:</strong>: O(log(min(a, b)).<br>" +
-        
-        "<strong> Space Complexity: </strong>O(|V|) = O(b^d)<br> </ul> " +
-    "</p>" ,
+    "</p>" 
+    ,
     "<p><strong>Linked List:</strong><br>" +
         "A linked list is a linear data structure that includes a series of connected nodes. <br>" +
         "Here, each node store the data and the address of the next node. <br>" +
@@ -127,10 +119,7 @@ const HTML[
         "<ul><strong> Time Complexity:</strong><br><br>" +
         "<li>Search: O(n)</li>" +
         "<li>Insertion: O(1)</li>" +
-        
-        "<li>Deletion: O(1)</li><br>" +
-        
-        "<strong> Space Complexity: </strong>O(n)<br> </ul>" +
-    "</p>",
+        "<li>Deletion: Search O(n) + O(1)</li><br>" +
+    "</p>"
 ];
 export{HTML}

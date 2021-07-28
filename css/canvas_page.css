@@ -247,8 +247,8 @@ input[type="range"][orient="vertical"] {
   width: 3rem;
   border-radius: 1.5rem;
   position: absolute;
-  top: 2rem;
-  right: 2rem;
+  top: 1rem;
+  right: 3rem;
   display: grid;
   place-items: center;
 }
@@ -266,20 +266,41 @@ input[type="range"][orient="vertical"] {
 
 #introduction {
   font-family: "Playfair Display", "serif";
-  text-align: center;
+  /* text-align: center; */
   color: rgb(100, 100, 100);
+  overflow-y: scroll;
+  /* text-overflow: scroll; */
+}
+
+#introduction::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+#introduction::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+#introduction::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+#introduction::-webkit-scrollbar-thumb:hover {
+  background: #555; 
 }
 
 #intro{
   display: grid;
-  place-items: center;
-  width: 50rem;
-  height: 550px;
+  /* place-items: center; */
+  width: 60rem;
+  height: 600px;
   border-radius: 2rem;
   background: #d7e6ff;
   padding: 2rem;
   position:absolute;
-  top: 140px;
+  top: 110px;
   left: 40px;
   z-index: 4;
 }
