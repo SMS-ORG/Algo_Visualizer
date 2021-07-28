@@ -58,14 +58,41 @@ const HTML = [
         "</li></ul>"+
     "</p>" 
     ,
-    "<p><strong>Merge Sort:</strong><br>Merge sort is a divide and conquer algorithm. It divides the input <br>" +
-        "array into two halves, calls itself for the two halves, and then merges the two sorted halves. <br>" +
-        
+    "<p><strong>Merge Sort:</strong><br>Merge sort is a divide and conquer algorithm. It is a recursive algorithm that <br>" +
+        "continually splits a list in half. If the list is empty or has one item, it is sorted in order.<br>" +
+        " If the list has more than one item, we split the list and recursively invoke <br>" +
+        "a merge sort on both halves. Once the two halves are sorted, the fundamental operation,<br>" +
+        "called a merge{the process of taking two smaller sorted lists and combining them together into a  <br>" +
+        "single, sorted, new list}, is performed to get a final sorted list.<br>" +
+                
         "<ul><strong> Time Complexity:</strong>O(n log n)<br>" +
         
     "</p>" 
     ,
-    "<p><strong>Binary Search Tree:</strong><br>" +
+    "<p><strong>Binary Search Tree:</strong><br>Bst is basically a node based binary tree data structure. <br>" +
+    "The node stores the key and pointer to the left and right subtrees.The left subtree of a node <br>" +
+    "contains only nodes with key lesser than the nodes key whereas .<br> " +
+    "the right subtree of a BST node contains only nodes with key greater than nodes key. <br> " +
+    "It is based on the idea of the binary search algorithm, which allows for fast search, insertion and removal <br> " +
+    "of nodes.On average, each comparison allows the operation to skip about half of the tree <br> " +
+    "so that each search, insertion or deletion takes time proportional to logarithm of number of items<br> " +
+    "stored in array i.e. O(logn) .However for worst case when the tree isn’t balanced the time complexity <br>" +
+    "is O(n) for all three functions. <br> "+
+    "<ul><strong> Time Complexity:</strong><br><br>" +
+        "For insertion" +
+        "<li>Worst Case:O(n)" + 
+        "<li>Best Case: O(log n)</li><br> "+
+
+        "For deletion" +
+        "<li>Worst Case:O(n)" + 
+        "<li>Best Case: O(log n)</li><br> "+
+
+        "For searching" +
+        "<li>Worst Case:O(n)" + 
+        "<li>Best Case: O(log n)</li><br> "+
+
+        "For traversal" +
+        "<li>General Cases:O(n)" + 
     "</p>"
     ,
     "<p><strong>A* (A-star) algorithm:</strong><br>" +
