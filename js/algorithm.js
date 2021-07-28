@@ -88,42 +88,37 @@ function mouseup(event) {
 const BubbleSort = () => {
   makeReady(1, [mousedown, mouseup]);
   changeActive("bubblesort");
-  introduction.innerHTML = HTML[0];
 }; //function for bubblesort
 
 const HeapSort = () => {
   makeReady(1, [mousedown, mouseup]);
   changeActive("heapsort");
-  introduction.innerHTML = HTML[0];
 }; //function for Heapsort
 
 const QuickSort = () => {
   makeReady(1, [mousedown, mouseup]);
   changeActive("quicksort");
-  introduction.innerHTML = HTML[0]; //function for quicksort
+  //function for quicksort
 };
 const MergeSort = () => {
   makeReady(1, [mousedown, mouseup]);
   changeActive("mergesort");
-  introduction.innerHTML = HTML[0];
 }; //function for MergeSort
 
 const PathFind = () => {
   makeReady(2, [mousedown, mouseup]);
   changeActive("pathfind");
-  introduction.innerHTML = HTML[0];
 }; //function for Path Finding Algorithm
 
 const Linkedlist = () => {
   makeReady(3, [mousedown, mouseup]);
   changeActive("linkedlist");
-  introduction.innerHTML = HTML[0];
 }; //function for Linked List
 
 const Bst = () => {
   makeReady(3, [mousedown, mouseup]);
   changeActive("bst"); 
-  introduction.innerHTML = HTML[0];//function for Bst
+  //function for Bst
 };
 
 function Sortingmethod() {
