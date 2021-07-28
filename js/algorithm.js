@@ -5,23 +5,10 @@ import {
   obtainMousePosition,
   Utils,
 } from "./canvas.js";
+import {HTML} from "./lookup_table.js";
 var toggler = "bubblesort";
 var mousedownID = -1;
 const drawmode = [0x001, 0x002, 0x004, 0x008]; //lookuptable [newstart, newend, removemode, insertmode]
-
-const HTML = [
-  "<h1>Algo Visualizer</h1>" +
-  "<hr>" +
-  "<p>Algo-Visualizer is intended to be a graphical visualizer of how sorting algorithms do<br>" +
-  "sort the data structure and data structures handle the data in an order.The main aim of<br>" +
-  "the algo visualizer is to present learners with a visual way to understand the way most<br>" +
-  "common algorithm works and how different approaches can yield different results in<br>" +
-  "different condition.<br>" +
-  "<br>" +
-  "Algo-Visualizer is intended to help novice programmers understand the intricacies of<br>" +
-  "sorting and pathfinding algorithms. This applet will be written in JavaScript with an<br>" +
-  "aim to popularize a visualization method as a pedagogical tool to teach/learn algorithms.</p><br>",
-]; // look up tables 
 
 let introduce = document.getElementById("intro");
 let introduction = document.getElementById("introduction");
