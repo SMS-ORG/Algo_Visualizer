@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./css/instructions.css" /> 
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://kit.fontawesome.com/82bac64d44.js" crossorigin="anonymous"></script>
+  <title>Instruction</title>
+</head>
+<body>
+<div class="container">
+<div class = infotexts>
+  <h1>Instructions</h1>
+  <p>Here you can find the instructions on how to use this visualization tool. If you don't know
+    what these algorithms are or you want to know more about these algorithms, you can select
+    the algorithms and press the about section.You can find the information about 
+    different controls button and instruction about how to use them below:</p>
+  <h2>Control Buttons:</h2>
+  <p>Control button are the buttons user can click to provide an input to the application.For this web app,controls are devided into categories.You can control the <a href="#animation-control">animation</a> and you can control and execute the <a href="#algorithm-control">algorithms.</a></p>
+  <section id="animation-control">
+  <h3>Animation Control</h3>
+  <p>These buttons control the  animation. You can play,pause,and set speed of the animation.
+    Buttons are disabled if there is no appropriate animation.</p>
+    <table id="table">
+        <tr>
+          <th>Button</th>
+          <th>Meaning</th> 
+          <th>Description</th>
+        </tr>
+        <tr>
+          <td><span style = "color:hsl(219, 100%, 68%)">
+            <i class="fa fa-solid fa-play fa-lg"></i></span></td>
+          <td>Play an animation</td>
+          <td>This button plays the animation at any time.</td>
+        </tr>
+        <tr>
+          <td><span style = "color:hsl(219, 100%, 68%)">
+            <i class="fa fa-solid fa-pause fa-lg "></i></span></td>
+          <td>Pause an animation</td>
+          <td>This button pause the animation at any time.</td>
+        </tr>
+        <tr>
+          <!-- <td>Forward</td> -->
+          <td><span style="color:hsl(219, 100%, 68%)"><i class="fa fa-solid fa-caret-right fa-3x"></i></span></td>
+          <td>Forward the animation</td>
+          <td>This button help to forward the animation.</td>
+        </tr>
+        <tr>
+          <!-- <td>Rewind</td> -->
+          <td><span style="color:hsl(219, 100%, 68%)"><i class="fa fa-solid fa-caret-left fa-3x"></i></span></td>
+          <td>Rewind the animation</td>
+          <td>This button rewinds the algorithms to where you want if you have missed a certain part in visualization.</td>
+        </tr>
+         <tr>
+          <td><select id="frameSlider">
+            <option value="240">0.25x</option>
+            <option value="120">0.5x</option>
+            <option value="60" selected>1x</option>
+            <option value="40">1.5x</option>
+            <option value="30">2x</option>
+          </select></td>
+          <td>Set the speed of the move</td>
+          <td>This is the drop down menu from where you can choose the prefered speed of the animation. You can set different speed levels like 0.25x, 0.5x,1x,1.5x,2x.</td>
+        </tr>
+      </table>
+    </section>
+  <section id="algorithm-control">
+  <h3>Algorithm Control</h3>
+  <p>These are the buttons to control the selected algorithms. Some algorithms require input to work.
+    Usually it is a value or some radio buttons.Value is entered as string at text input.</p>
+  <h4>Algorithm(Sorting)</h4>
+  <table id="table">
+    <tr>
+        <th>Button</th>
+        <th>Meaning</th> 
+        <th>Description</th>
+    </tr>
+    <tr>
+      <td><input
+        type="range"
+        min="5"
+        step="5"
+        max="65"
+        value="30"
+        id="myRange"
+      /></th>
+      <td>Changes the size of an array</th> 
+      <td>This button changes the size of array for sorting methods.You can change the size of 
+          array based upon your requirement.This slider is disabled for BST,linked list and A* algorithm</th>
+    </tr>
+  </table>
+  <p>You can visualize different sorting algorithm by clicking on the desired algrithms on navbar. To perform the sorting algorithm, first 
+    you have to input the size of the array by sliding on the slider and then you can start visualizing.
+     You can control the animation at any point with the help of buttons <a href="#animation-control">mentioned above.</a></p>
+  <h4>Algorithm(BST and Linked List)</h4>
+  <table id="table">
+    <tr>
+        <th>Button</th>
+        <th>Meaning</th> 
+        <th>Description</th>
+    </tr>
+    <tr>
+      <td><input id="inputsvalue" type="text" name="tree-data"></th>
+      <td>Textbox to input the value</th> 
+      <td>Input the value in this textbox to perform various operations like insert, delete and search.
+          You can input multiple values at once by separating the values with comma to  perform insertion 
+          in the binary search tree.</th>
+    </tr>
+    <tr>
+      <td>
+        <div id="tree-container">
+          <select name="tree_options" id="tree_options">
+            <option value="1" selected>Insert</option>
+            <option value="2">Delete</option>
+            <option value="4">Search</option>
+            <option value="5">In-order</option>
+            <option value="6">Pre-Order</option>
+            <option value="7">Post-Order</option>
+          </select>
+      </div>
+      </td>
+      <td>Menu to select required operation</td>
+      <td>From this drop down list, you can select between different operations 
+          like insertion, deletion, searching, traversal.</td>
+    </tr>
+  </table>
+  <p>To perform BST, you have to first insert the value in the text field. 
+    Remember, you can insert multiple value at once by separating the values with comma. When you submit
+     the values you can play the animation. You can perform different operation {insertion,deletion,searching,traversal} by selecting from the drop down
+      list. For linked list, the process is same as above but you cannot use the 
+      traversal function(inorder,postorder and pre-order).
+  </p>
+  <h4>Algorithm(A* path finding)</h4>
+  <table id="table">
+    <tr>
+      <th>Button</th>
+      <th>Meaning</th> 
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td> <input type="radio" id="insertStart" name="Insert" value="1" />
+          <label class="labels_text" for="Insert">SetStart</label>
+      </td>
+      <td>Set the start pf the path</td>
+      <td>You can use this radio button to set the start of the path to perform path finding algorithm.</td>
+    </tr>
+    <tr>
+      <td><input type="radio" id="insertStart" name="Insert" value="1" />
+        <label class="labels_text" for="Insert">SetEnd</label></td>
+      <td>Set the End of the path</td>
+      <td>You can use this radio button to set the end of the path to perform path finding algorithm.</td>
+    </tr>
+    <tr>
+      <td><input type="radio" id="insertStart" name="Insert" value="1" />
+        <label class="labels_text" for="Insert">Insert</label></td>
+      <td>Insert Obstacles</td>
+      <td>You can use this radio button to insert obstacles between the path and see how the algorithm works to avoid the path.</td>
+    </tr>
+     <tr>
+      <td><input type="radio" id="insertStart" name="Insert" value="1" />
+        <label class="labels_text" for="Insert">Remove</label></td>
+      <td>Remove obstacles</td>
+      <td>You can use this radio button to remove the obstacle you insert between the paths.</td>
+    </tr>
+  </table>
+  <p>To perform this algorithm, you have to set the start and the end of the path.Start of the path is denoted by <span style="color: purple">purple color</span> whereas end of the path is denoted by <span style="color: red">red color.</span> All the obstacles are denoted by balck color. You can add multiple 
+    obstacles between the path with the help of insert button and visualize how the algorithm works to avoid these obstacles to reach its 
+    destination.</p>
+  </section>
+</div></div>
+</body>
+</html>
