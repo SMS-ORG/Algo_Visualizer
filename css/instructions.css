@@ -1,3 +1,8 @@
+body{
+  background-color: rgb(73, 70, 70);
+  background-image: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.85) 100%);
+}
+
 table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
@@ -8,7 +13,7 @@ table, th, td {
   }
   #table {
     width: 100%;    
-    background-color: #f1f1c1;
+    background-color: #f0efeff1;
   }
   .infotexts{
     font-family: 'Open Sans', sans-serif;
@@ -19,8 +24,15 @@ table, th, td {
     /* display: flex; */
     /* align-items: center; */
     
-    color: rgba(35, 32, 66, 0.89);
+    color: #4e4e6e;
   }
+  .infotexts .heading{
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: bold;
+    color: #38385d;
+  } 
+
   #tree_options{
     background: hsl(219, 100%, 68%);
     height: 2rem;
