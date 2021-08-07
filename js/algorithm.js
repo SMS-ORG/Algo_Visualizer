@@ -159,14 +159,14 @@ function Sortingmethod() {
     document.getElementById("playPause").addEventListener("click", () => {
       var playPause = document.getElementById("playPause");
       if (!Utils.AnimationController.playing) {
-        Utils.AnimationController.cancelAnimation();
+        // Utils.AnimationController.cancelAnimation();
         Utils.AnimationController.playing = true;
         Utils.AnimationController.queueIncrement = 1;
         Utils.AnimationController.frameRate = Utils.AnimationController.recentFrameRate;
         playPause.classList.toggle("paused");
         Sortingmethod();
       }
-      if (playPause.classList.length == 1) {
+      else if (playPause.classList.length == 1) {
         Utils.AnimationController.recentFrameRate =
           Utils.AnimationController.frameRate;
         Utils.AnimationController.frameRate = 100000;

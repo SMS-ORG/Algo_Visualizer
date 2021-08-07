@@ -572,7 +572,11 @@ const Utils = {
     time: Date.now(),
     cancelAnimation: function () {
       window.cancelAnimationFrame(Utils.AnimationController.animation);
-      document.getElementById("playPause").classList.toggle("paused");
+      let element = document.getElementById("playPause");
+      if(element.classList.length == 1)
+      {
+        element.classList.toggle("paused");
+      }
     },
   },
 };
