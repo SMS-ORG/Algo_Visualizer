@@ -1094,6 +1094,7 @@ function drawGrid() {
 const clearResourcesSort = function() {
   Utils.Sorting.arr = [];
   document.getElementById("myRange").disabled = true;
+  Utils.Sorting.arr_y = [];
 };
 
 const clearResourcesPathFind = function (functions) {
@@ -1217,7 +1218,7 @@ function drawsmallRectangles() {
   Utils.AnimationController.elapsed_time = Utils.AnimationController.now - Utils.AnimationController.time;
   if (Utils.AnimationController.playing) {
     let pos;
-    if (Utils.AnimationController.elapsed_time >= Utils.AnimationController.frameRate) {
+    if (Utils.AnimationController.elapsed_time >= (Utils.AnimationController.frameRate / 4)) {
       drawGrid();
       drawInputpos();
       for (let i = 0; i <= Utils.AnimationController.queueIndex; i++) {
