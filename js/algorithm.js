@@ -235,5 +235,6 @@ function Sortingmethod() {
     });
     introduction.innerHTML = HTML[0];
     introduce.style.display = "none";
+
   }
 }) (window, document, undefined);

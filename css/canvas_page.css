@@ -328,6 +328,13 @@ input[type="range"][orient="vertical"] {
   padding-left: 4px;
 }
 
+#tree_inputs
+{
+  overflow-y: scroll;
+  background-color: #f1f1f1;
+  height: 20vh;
+  width: 80%;
+}
 @media screen and (max-width:900px) {
   nav{
     height:60px;

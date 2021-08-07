@@ -217,11 +217,11 @@ class BST{
     {
         if(!this.isEmpty())
         {
-            if(key === 5)
+            if(key === 4)
             {
                 this.inOrder(queue,this.root);
             }
-            else if(key === 6)
+            else if(key === 5)
             {
                 this.preOrder(queue, this.root);
             }
@@ -436,7 +436,7 @@ function Bst(number, mode,offset){
     else if (mode === 2){
         LinBst.Bst.deleteKey(number, queue);
     }
-    else if(mode === 4)
+    else if(mode === 3)
     {
         LinBst.Bst.search(number,queue);
     }

@@ -252,6 +252,7 @@ function Astarfunc()
 
         if( isSame(current.gPos(), end.gPos()) ){
             Utils.queue=reconstructPath(camefrom, current);
+            Utils.grid =[];
             drawsmallRectangles();
             return;
         }
