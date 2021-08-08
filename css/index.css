@@ -20,7 +20,7 @@ body{
 .nav .title .Algo {
   color: #2a2a73;
   text-decoration: none;
-  font-size: 4em;
+  font-size: 3.5em;
   font-family: Raleway;
   font-style: normal;
   font-weight: 600;
@@ -29,7 +29,7 @@ body{
 .nav .links a {
   align-self: center;
   text-decoration: none;
-  font-size: 2em;
+  font-size: 1.5em;
   font-family: 'Open Sans', sans-serif;
   font-style: normal;
   font-weight: bold;
